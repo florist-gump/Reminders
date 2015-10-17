@@ -23,7 +23,6 @@ public class Tasks extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listView = (ListView) findViewById(R.id.task_list);
 
-
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
