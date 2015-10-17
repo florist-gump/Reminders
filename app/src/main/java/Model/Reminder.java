@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -7,7 +8,7 @@ import java.util.Collections;
 /**
  * Created by Flo on 13/10/15.
  */
-public class Reminder {
+public class Reminder implements Serializable {
     private String name;
     private ArrayList<Occurrence> occurrences;
 
@@ -30,6 +31,11 @@ public class Reminder {
 
     public void setOccurrences(ArrayList<Occurrence> occurrences) {
         this.occurrences = occurrences;
+    }
+
+    @Override
+    public String toString(){
+        return "Reminder" + name;
     }
 
     public void addOccurrence(Occurrence occurrence) {

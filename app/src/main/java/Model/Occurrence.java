@@ -3,9 +3,11 @@ package Model; /**
  */
 import org.joda.time.LocalTime;
 
+import java.io.Serializable;
+
 import Helpers.DAYSOFTHEWEEK;
 
-public class Occurrence implements Comparable<Occurrence> {
+public class Occurrence implements Comparable<Occurrence>, Serializable {
     private DAYSOFTHEWEEK day;
     private LocalTime time;
     private Reminder reminder;

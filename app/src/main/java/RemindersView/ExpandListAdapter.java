@@ -13,6 +13,8 @@ import com.google.common.collect.Collections2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.regex.Pattern;
 
 import Helpers.CustomPredicates;
@@ -25,7 +27,7 @@ import teamproject.glasgow.reminders_app.R;
 /**
  * Created by Flo on 13/10/15.
  */
-public class ExpandListAdapter extends BaseExpandableListAdapter {
+public class ExpandListAdapter extends BaseExpandableListAdapter implements Observer {
 
     private Context context;
     private Reminders reminders;
@@ -37,7 +39,16 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         this.context = context;
         this.reminders = reminders;
         if (reminders != null)
-        sortedListOfAllOccurances = reminders.getSortedListOfAllOccurrences();
+            sortedListOfAllOccurances = reminders.getSortedListOfAllOccurrences();
+        reminders.addObserver(this);
+    }
+
+    public Reminders getReminders() {
+        return reminders;
+    }
+
+    public void setReminders(Reminders reminders) {
+        this.reminders = reminders;
     }
 
     @Override
@@ -86,8 +97,8 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         }
         TextView tv = (TextView) convertView.findViewById(R.id.Day);
         tv.setText(day.name());
-        ExpandableListView expandableListView = (ExpandableListView) parent;
-        expandableListView.expandGroup(groupPosition);
+        //ExpandableListView expandableListView = (ExpandableListView) parent;
+        //expandableListView.expandGroup(groupPosition);
         return convertView;
     }
 
@@ -100,11 +111,19 @@ public class ExpandListAdapter extends BaseExpandableListAdapter {
         }
         TextView tv = (TextView) convertView.findViewById(R.id.Text);
         tv.setText(occurrence.getReminder().getName());
+        TextView time = (TextView) convertView.findViewById(R.id.Time);
+        time.setText(((Occurrence) getChild(groupPosition, childPosition)).getTime().toString("HH:mm"));
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        sortedListOfAllOccurances = reminders.getSortedListOfAllOccurrences();
+        notifyDataSetChanged();
     }
 }

@@ -1,24 +1,51 @@
 package teamproject.glasgow.reminders_app;
 
+import android.app.AlarmManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import org.joda.time.LocalTime;
+import java.util.Calendar;
 
-import java.util.ArrayList;
-
-import Helpers.DAYSOFTHEWEEK;
-import Model.*;
+import Helpers.AlaramReceiver;
+import Helpers.HelperFunctions;
+import Model.Occurrence;
+import Model.Reminder;
 import RemindersView.ExpandListAdapter;
 
 public class Reminders extends AppCompatActivity {
+
+    Model.Reminders reminders;
+
+    private ListView mDrawerList;
+    private ArrayAdapter<String> mAdapter;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout mDrawerLayout;
+    private String mActivityTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,40 +54,140 @@ public class Reminders extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mActivityTitle = getTitle().toString();
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(Reminders.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        addDrawerItems();
+        setupDrawer();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        reminders = HelperFunctions.generateReminderTestData();
+
+        ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.ExpList);
+        final ExpandListAdapter ExpAdapter = new ExpandListAdapter(Reminders.this, reminders);
+        expandableListView.setAdapter(ExpAdapter);
+
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Occurrence occurrence = (Occurrence) ExpAdapter.getChild(groupPosition, childPosition);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setClassName("teamproject.glasgow.reminders_app", "teamproject.glasgow.reminders_app.ModifyReminder");
+                intent.putExtra("display_type", "modify_reminder");
+                Reminder reminder = occurrence.getReminder();
+                intent.putExtra("reminder", reminder);
+                reminders.removeReminder(reminder);
+                startActivityForResult(intent, 2);
+                return true;
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                //Intent intent = new Intent(view.getContext(), ModifyReminder.class);
+                //startActivity(intent);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setClassName("teamproject.glasgow.reminders_app", "teamproject.glasgow.reminders_app.ModifyReminder");
+                intent.putExtra("display_type", "add_reminder");
+                startActivityForResult(intent, 1);
             }
         });
 
-        Reminder reminder = new Reminder("Teeth");
-        Occurrence occurrence1 = new Occurrence(DAYSOFTHEWEEK.FRIDAY,new LocalTime(12,2),reminder);
-        Occurrence occurrence2 = new Occurrence(DAYSOFTHEWEEK.WEDNESDAY,new LocalTime(12,50),reminder);
-        Occurrence occurrence3 = new Occurrence(DAYSOFTHEWEEK.MONDAY,new LocalTime(11,2),reminder);
-        Occurrence occurrence4 = new Occurrence(DAYSOFTHEWEEK.MONDAY,new LocalTime(10,2),reminder);
+        //setButtonColor
+        Drawable myFabSrc = ResourcesCompat.getDrawable(getResources(), android.R.drawable.ic_input_add, getTheme());
+        Drawable white = myFabSrc.getConstantState().newDrawable();
+        white.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        fab.setImageDrawable(white);
 
-        reminder.addOccurrence(occurrence1);
-        reminder.addOccurrence(occurrence2);
-        reminder.addOccurrence(occurrence3);
-        reminder.addOccurrence(occurrence4);
+    }
 
-        Model.Reminders reminders = new Model.Reminders();
-        reminders.addReminder(reminder);
+    private void addDrawerItems() {
+        String[] listItems = { "Reminders", "Tasks", "Survey"};
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+        mDrawerList.setAdapter(mAdapter);
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    }
 
-        ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.ExpList);
-        ExpandListAdapter ExpAdapter = new ExpandListAdapter(Reminders.this, reminders);
-        expandableListView.setAdapter(ExpAdapter);
+    private void setupDrawer() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle("Navigation!");
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(mActivityTitle);
+                invalidateOptionsMenu();
+            }
+        };
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_reminders, menu);
-        return true;
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    Bundle res = data.getExtras();
+                    Reminder reminder =  (Reminder)res.getSerializable("reminder");
+                    createAlarmManager(reminder);
+                    reminders.addReminder(reminder);
+                }
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    Bundle res = data.getExtras();
+                    Reminder reminder =  (Reminder)res.getSerializable("reminder");
+                    createAlarmManager(reminder);
+                    reminders.addReminder(reminder);
+                }
+                break;
+        }
+    }
+
+    private void createAlarmManager(Reminder reminder) {
+        Calendar calendar = Calendar.getInstance();
+        for (Occurrence o : reminder.getOccurrences()) {
+            calendar.set(Calendar.HOUR_OF_DAY, o.getTime().getHourOfDay());
+            calendar.set(Calendar.MINUTE, o.getTime().getMinuteOfHour());
+            calendar.set(Calendar.SECOND, o.getTime().getSecondOfMinute());
+            Intent intent1 = new Intent(Reminders.this, AlaramReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(Reminders.this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager am = (AlarmManager) Reminders.this.getSystemService(Reminders.this.ALARM_SERVICE);
+            am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
     }
 
     @Override
@@ -68,13 +195,58 @@ public class Reminders extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
+        int id = item.getItemId();
+        /*
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        */
+
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_reminders, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+
+        /** Swaps fragments in the main content view */
+        private void selectItem(int position) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);;
+            switch(position) {
+                case 1:
+                    intent.setClassName("teamproject.glasgow.reminders_app", "teamproject.glasgow.reminders_app.Tasks");
+                    startActivity(intent);
+                    break;
+                case 2:
+                    intent.setClassName("teamproject.glasgow.reminders_app", "teamproject.glasgow.reminders_app.Survey");
+                    startActivity(intent);
+                    break;
+            }
+            DrawerLayout mDrawerLayout;
+            mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            mDrawerLayout.closeDrawers();
+
+        }
+    }
+
 }
