@@ -34,6 +34,12 @@ public class Reminders extends Observable {
         notifyObservers();
     }
 
+    public void modifyReminder(Reminder reminder) {
+        this.reminders.set(reminders.indexOf(reminder),reminder);
+        setChanged();
+        notifyObservers();
+    }
+
 
     public void removeReminder(Reminder reminder) {
         this.reminders.remove(reminder);

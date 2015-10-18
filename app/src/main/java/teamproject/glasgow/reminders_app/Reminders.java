@@ -1,10 +1,7 @@
 package teamproject.glasgow.reminders_app;
 
 import android.app.AlarmManager;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -35,7 +32,7 @@ import Helpers.AlaramReceiver;
 import Helpers.HelperFunctions;
 import Model.Occurrence;
 import Model.Reminder;
-import RemindersView.ExpandListAdapter;
+import Controllers.ExpandListAdapter;
 
 public class Reminders extends AppCompatActivity {
 
@@ -46,6 +43,8 @@ public class Reminders extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
+
+    ExpandListAdapter ExpAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +72,7 @@ public class Reminders extends AppCompatActivity {
         reminders = HelperFunctions.generateReminderTestData();
 
         ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.ExpList);
-        final ExpandListAdapter ExpAdapter = new ExpandListAdapter(Reminders.this, reminders);
+        ExpAdapter = new ExpandListAdapter(Reminders.this, reminders);
         expandableListView.setAdapter(ExpAdapter);
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -127,7 +126,7 @@ public class Reminders extends AppCompatActivity {
 
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
+                //getSupportActionBar().setTitle("Navigation");
                 invalidateOptionsMenu();
             }
 

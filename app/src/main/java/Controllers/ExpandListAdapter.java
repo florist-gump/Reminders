@@ -1,21 +1,17 @@
-package RemindersView;
+package Controllers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
-import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.regex.Pattern;
 
 import Helpers.CustomPredicates;
 import Helpers.DAYSOFTHEWEEK;
