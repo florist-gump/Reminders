@@ -251,7 +251,6 @@ public class Reminders extends AppCompatActivity {
             }
         });
 
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
