@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-import Helpers.AlaramReceiver;
+import Helpers.AlarmReceiver;
 import Helpers.HelperFunctions;
 import Model.Occurrence;
 import Model.Reminder;
@@ -182,7 +182,7 @@ public class Reminders extends AppCompatActivity {
             calendar.set(Calendar.HOUR_OF_DAY, o.getTime().getHourOfDay());
             calendar.set(Calendar.MINUTE, o.getTime().getMinuteOfHour());
             calendar.set(Calendar.SECOND, o.getTime().getSecondOfMinute());
-            Intent intent1 = new Intent(Reminders.this, AlaramReceiver.class);
+            Intent intent1 = new Intent(Reminders.this, AlarmReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(Reminders.this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager am = (AlarmManager) Reminders.this.getSystemService(Reminders.this.ALARM_SERVICE);
             am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);

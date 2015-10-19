@@ -52,6 +52,7 @@ public class Tasks extends AppCompatActivity {
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
+                                    Toast.makeText(Tasks.this, "Task completed", Toast.LENGTH_SHORT).show();
                                     PersistencyManager.logTaskCompletetion(adapter.getItem(position));
                                 }
                             }
