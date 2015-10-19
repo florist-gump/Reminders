@@ -87,6 +87,22 @@ public class Reminders extends AppCompatActivity {
             expandableListView.expandGroup(i);
         }
 
+        /*
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                if (!parent.isGroupExpanded(groupPosition)) {
+                    parent.expandGroup(groupPosition);
+                } else {
+                    parent.collapseGroup(groupPosition);
+                }
+
+                return true;
+            }
+        });
+        */
+
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
             @Override
