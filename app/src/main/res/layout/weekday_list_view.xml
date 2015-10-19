@@ -3,17 +3,27 @@
     android:layout_width="fill_parent"
     android:layout_height="10dip"
     android:background="#D8D8D8"
-    android:orientation="vertical" >
-
+    android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/Day"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="15dip"
         android:layout_marginRight="25dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         android:textColor="#A4A4A4"
          />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:id="@+id/mGroupimage"
+        android:layout_gravity="center_vertical|right"
+        android:src="@null" />
+
 </LinearLayout>

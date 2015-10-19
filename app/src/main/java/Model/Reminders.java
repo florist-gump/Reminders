@@ -7,7 +7,11 @@ import android.content.Intent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Observable;
+import java.util.Set;
+
+import Helpers.DAYSOFTHEWEEK;
 
 
 /**
@@ -34,8 +38,8 @@ public class Reminders extends Observable {
         notifyObservers();
     }
 
-    public void modifyReminder(Reminder reminder) {
-        this.reminders.set(reminders.indexOf(reminder),reminder);
+    public void modifyReminder(Reminder reminder, int index) {
+        this.reminders.set(index, reminder);
         setChanged();
         notifyObservers();
     }
@@ -43,6 +47,12 @@ public class Reminders extends Observable {
 
     public void removeReminder(Reminder reminder) {
         this.reminders.remove(reminder);
+        setChanged();
+        notifyObservers();
+    }
+
+    public void removeReminder(int index) {
+        this.reminders.remove(index);
         setChanged();
         notifyObservers();
     }
@@ -56,6 +66,19 @@ public class Reminders extends Observable {
         }
         Collections.sort(occurrences);
         return occurrences;
+    }
+
+    public ArrayList<DAYSOFTHEWEEK> getDaysOfWeekThatHaveOccurances() {
+        Set<DAYSOFTHEWEEK> hs = new HashSet<DAYSOFTHEWEEK>();
+        for (Reminder r : reminders) {
+            for (Occurrence o : r.getOccurrences()) {
+                hs.add(o.getDay());
+            }
+        }
+        ArrayList<DAYSOFTHEWEEK> days = new ArrayList<DAYSOFTHEWEEK>();
+        days.addAll(hs);
+        Collections.sort(days);
+        return days;
     }
 
 }

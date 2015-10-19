@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.common.collect.Collections2;
@@ -16,6 +17,7 @@ import java.util.Observer;
 import Helpers.CustomPredicates;
 import Helpers.DAYSOFTHEWEEK;
 import Model.Occurrence;
+import Model.Reminder;
 import Model.Reminders;
 import teamproject.glasgow.reminders_app.R;
 
@@ -29,13 +31,19 @@ public class ExpandListAdapter extends BaseExpandableListAdapter implements Obse
     private Reminders reminders;
     // Objects for displaying reminders
     private ArrayList<Occurrence> sortedListOfAllOccurances;
+    private ArrayList<DAYSOFTHEWEEK> group;
 
+    private Boolean searchActive = false;
+    private ArrayList<Reminder> unfilteredRemindersList;
 
     public ExpandListAdapter(Context context, Reminders reminders) {
         this.context = context;
         this.reminders = reminders;
-        if (reminders != null)
+        if (reminders != null) {
             sortedListOfAllOccurances = reminders.getSortedListOfAllOccurrences();
+            group = reminders.getDaysOfWeekThatHaveOccurances();
+        }
+
         reminders.addObserver(this);
     }
 
@@ -49,23 +57,23 @@ public class ExpandListAdapter extends BaseExpandableListAdapter implements Obse
 
     @Override
     public int getGroupCount() {
-        return DAYSOFTHEWEEK.values().length;
+        return group.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        ArrayList<Occurrence> filteredOccurrences = new ArrayList<Occurrence>(Collections2.filter(sortedListOfAllOccurances, CustomPredicates.filterPredicatesWithDayOfTheWeek(DAYSOFTHEWEEK.values()[groupPosition])));
+        ArrayList<Occurrence> filteredOccurrences = new ArrayList<Occurrence>(Collections2.filter(sortedListOfAllOccurances, CustomPredicates.filterPredicatesWithDayOfTheWeek(group.get(groupPosition))));
         return filteredOccurrences.size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return DAYSOFTHEWEEK.values()[groupPosition];
+        return group.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        ArrayList<Occurrence> filteredOccurrences = new ArrayList<Occurrence>(Collections2.filter(sortedListOfAllOccurances, CustomPredicates.filterPredicatesWithDayOfTheWeek(DAYSOFTHEWEEK.values()[groupPosition])));
+        ArrayList<Occurrence> filteredOccurrences = new ArrayList<Occurrence>(Collections2.filter(sortedListOfAllOccurances, CustomPredicates.filterPredicatesWithDayOfTheWeek(group.get(groupPosition))));
         return filteredOccurrences.get(childPosition);
     }
 
@@ -93,6 +101,16 @@ public class ExpandListAdapter extends BaseExpandableListAdapter implements Obse
         }
         TextView tv = (TextView) convertView.findViewById(R.id.Day);
         tv.setText(day.name());
+        ImageView mGroupIndicator=(ImageView)convertView.findViewById(R.id.mGroupimage);
+        if (isExpanded) {
+            if(getChildrenCount(groupPosition)>0) {
+                mGroupIndicator.setImageResource(R.drawable.group_indicator_up);
+            }
+        } else {
+            if(getChildrenCount(groupPosition)>0) {
+                mGroupIndicator.setImageResource(R.drawable.group_indicator);
+            }
+        }
         //ExpandableListView expandableListView = (ExpandableListView) parent;
         //expandableListView.expandGroup(groupPosition);
         return convertView;
@@ -120,6 +138,29 @@ public class ExpandListAdapter extends BaseExpandableListAdapter implements Obse
     @Override
     public void update(Observable observable, Object data) {
         sortedListOfAllOccurances = reminders.getSortedListOfAllOccurrences();
+        group = reminders.getDaysOfWeekThatHaveOccurances();
         notifyDataSetChanged();
+    }
+
+    public void filter(String newText) {
+        newText = newText.toLowerCase();
+        if(unfilteredRemindersList != null && !unfilteredRemindersList.isEmpty()) {
+            reminders.setReminders(unfilteredRemindersList);
+        }
+        ArrayList<Model.Reminder> filteredReminders = new ArrayList<Model.Reminder>(Collections2.filter(reminders.getReminders(), CustomPredicates.filterReminders(newText)));
+        reminders.setReminders(filteredReminders);
+        update(null,null);
+
+    }
+
+    public void removeFilter() {
+        reminders.setReminders(unfilteredRemindersList);
+        update(null, null);
+        searchActive = false;
+    }
+
+    public void searchStarted() {
+        unfilteredRemindersList = reminders.getReminders();
+        searchActive = true;
     }
 }

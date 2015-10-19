@@ -24,6 +24,7 @@ import Model.Reminder;
 public class ModifyReminder extends AppCompatActivity {
 
     private boolean isAddMode;
+    private int reminderIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class ModifyReminder extends AppCompatActivity {
             case "modify_reminder":
                 isAddMode = false;
                 Reminder reminder = (Reminder) res.getSerializable("reminder");
+                reminderIndex = res.getInt("index");
                 setViewDataFromReminder(reminder);
                 break;
         }
@@ -68,6 +70,11 @@ public class ModifyReminder extends AppCompatActivity {
         }
 
         if (id==R.id.action_delete) {
+            Intent resultIntent = new Intent();
+
+            resultIntent.putExtra("delete", true);
+            resultIntent.putExtra("index",reminderIndex);
+            setResult(Activity.RESULT_OK, resultIntent);
             finish();
         }
 
@@ -77,6 +84,7 @@ public class ModifyReminder extends AppCompatActivity {
             Reminder reminder = getReminder();
 
             resultIntent.putExtra("reminder",reminder);
+            resultIntent.putExtra("index",reminderIndex);
             setResult(Activity.RESULT_OK, resultIntent);
             finish();
         }

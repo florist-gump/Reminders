@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
@@ -72,8 +73,19 @@ public class Reminders extends AppCompatActivity {
         reminders = HelperFunctions.generateReminderTestData();
 
         ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.ExpList);
+
+        // Display indicator on the right
+        Display newDisplay = getWindowManager().getDefaultDisplay();
+        int width = newDisplay.getWidth();
+        expandableListView.setIndicatorBounds(width-100, width);
+
         ExpAdapter = new ExpandListAdapter(Reminders.this, reminders);
         expandableListView.setAdapter(ExpAdapter);
+
+        //expand all items
+        for ( int i = 0; i < ExpAdapter.getGroupCount(); i++ ) {
+            expandableListView.expandGroup(i);
+        }
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
@@ -85,7 +97,7 @@ public class Reminders extends AppCompatActivity {
                 intent.putExtra("display_type", "modify_reminder");
                 Reminder reminder = occurrence.getReminder();
                 intent.putExtra("reminder", reminder);
-                reminders.removeReminder(reminder);
+                intent.putExtra("index", reminders.getReminders().indexOf(reminder));
                 startActivityForResult(intent, 2);
                 return true;
             }
@@ -157,7 +169,7 @@ public class Reminders extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
-            case 1:
+            case 1:  // add reminder
                 if (resultCode == RESULT_OK) {
                     Bundle res = data.getExtras();
                     Reminder reminder =  (Reminder)res.getSerializable("reminder");
@@ -165,12 +177,18 @@ public class Reminders extends AppCompatActivity {
                     reminders.addReminder(reminder);
                 }
                 break;
-            case 2:
+            case 2: //modify reminder
                 if (resultCode == RESULT_OK) {
                     Bundle res = data.getExtras();
+                    if (res.getBoolean("delete")) {
+                        Integer index =  res.getInt("index");
+                        reminders.removeReminder(index);
+                        break;
+                    }
                     Reminder reminder =  (Reminder)res.getSerializable("reminder");
+                    Integer index =  res.getInt("index");
                     createAlarmManager(reminder);
-                    reminders.addReminder(reminder);
+                    reminders.modifyReminder(reminder,index);
                 }
                 break;
         }
@@ -218,6 +236,35 @@ public class Reminders extends AppCompatActivity {
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+
+        searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+
+            @Override
+            public void onViewDetachedFromWindow(View arg0) {
+                ExpAdapter.removeFilter();
+            }
+
+            @Override
+            public void onViewAttachedToWindow(View arg0) {
+                ExpAdapter.searchStarted();
+            }
+        });
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ExpAdapter.filter(newText);
+                return true;
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
