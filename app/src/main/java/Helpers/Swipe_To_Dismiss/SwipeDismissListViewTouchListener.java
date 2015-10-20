@@ -23,6 +23,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -36,6 +37,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import teamproject.glasgow.reminders_app.R;
 
 public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
     // Cached ViewConfiguration and system-wide constant values
@@ -59,7 +62,10 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
     private VelocityTracker mVelocityTracker;
     private int mDownPosition;
     private View mDownView;
+    private View mDownViewBackground;
     private boolean mPaused;
+
+
 
     /**
      * The callback interface used by {@link SwipeDismissListViewTouchListener} to inform its client
@@ -157,7 +163,9 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                     child = mListView.getChildAt(i);
                     child.getHitRect(rect);
                     if (rect.contains(x, y)) {
-                        mDownView = child;
+                        mDownView = child.findViewById(R.id.task_text);
+                        mDownViewBackground = child;
+                        mDownViewBackground.setBackgroundColor(Color.WHITE);
                         break;
                     }
                 }
@@ -252,6 +260,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                 mDownView = null;
                 mDownPosition = ListView.INVALID_POSITION;
                 mSwiping = false;
+                mDownViewBackground.setBackgroundColor(Color.WHITE);
                 break;
             }
 
@@ -269,6 +278,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                     mListView.requestDisallowInterceptTouchEvent(true);
 
                     // Cancel ListView's touch (un-highlighting the item)
+                    //mDownViewBackground.setBackgroundColor(Color.WHITE);
                     MotionEvent cancelEvent = MotionEvent.obtain(motionEvent);
                     cancelEvent.setAction(MotionEvent.ACTION_CANCEL |
                             (motionEvent.getActionIndex()
@@ -279,8 +289,10 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
 
                 if (mSwiping) {
                     mDownView.setTranslationX(deltaX - mSwipingSlop);
-                    mDownView.setAlpha(Math.max(0f, Math.min(1f,
-                            1f - 2f * Math.abs(deltaX) / mViewWidth)));
+                    //mDownView.setAlpha(Math.max(0f, Math.min(1f,
+                    //        1f + 2f * Math.abs(deltaX) / mViewWidth)));
+                    mDownViewBackground.setBackgroundColor(Color.parseColor("#08E700"));
+                    mDownViewBackground.setAlpha(Math.min(1f, Math.min(1f, 1.1f * Math.abs(deltaX) / mViewWidth)));
                     return true;
                 }
                 break;
@@ -310,6 +322,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
         // all dismissed list item animations have completed. This triggers layout on each animation
         // frame; in the future we may want to do something smarter and more performant.
 
+        mDownViewBackground.setBackgroundColor(Color.parseColor("#08E700"));
 
         final ViewGroup.LayoutParams lp = dismissView.getLayoutParams();
         final int originalHeight = dismissView.getHeight();
@@ -361,7 +374,6 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 lp.height = (Integer) valueAnimator.getAnimatedValue();
                 //dismissView.setLayoutParams(lp);
-                dismissView.setBackgroundColor(Color.GREEN);
             }
         });
 
