@@ -26,4 +26,6 @@ dependencies {
     compile 'com.android.support:design:23.0.1'
     compile 'joda-time:joda-time:2.8.2'
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    compile 'com.parse.bolts:bolts-android:1.+'
+    compile 'com.parse:parse-android:1.+'
 }

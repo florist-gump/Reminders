@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Parse-1.10.3/Parse-1.10.3.iml" filepath="$PROJECT_DIR$/Parse-1.10.3/Parse-1.10.3.iml" />
       <module fileurl="file://$PROJECT_DIR$/Reminders-App.iml" filepath="$PROJECT_DIR$/Reminders-App.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/libraries/joda-time-2.8.2/joda-time-2.8.2.iml" filepath="$PROJECT_DIR$/libraries/joda-time-2.8.2/joda-time-2.8.2.iml" />
