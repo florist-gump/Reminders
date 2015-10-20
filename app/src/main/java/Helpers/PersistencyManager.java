@@ -46,9 +46,6 @@ public abstract class PersistencyManager {
         task = new Task("Take a Nap");
         tasks.add(task);
 
-        task = new Task("Take a Nap");
-        tasks.add(task);
-
         task = new Task("Study");
         tasks.add(task);
 

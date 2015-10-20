@@ -46,6 +46,7 @@ public class Reminders extends AppCompatActivity {
     private String mActivityTitle;
 
     ExpandListAdapter ExpAdapter;
+    ExpandableListView expandableListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,8 @@ public class Reminders extends AppCompatActivity {
 
         reminders = HelperFunctions.generateReminderTestData();
 
-        ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.ExpList);
+        expandableListView = (ExpandableListView) findViewById(R.id.ExpList);
+
 
         // Display indicator on the right
         Display newDisplay = getWindowManager().getDefaultDisplay();
@@ -225,17 +227,10 @@ public class Reminders extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
 
         int id = item.getItemId();
-        /*
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        */
+
 
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
@@ -259,6 +254,10 @@ public class Reminders extends AppCompatActivity {
             @Override
             public void onViewDetachedFromWindow(View arg0) {
                 ExpAdapter.removeFilter();
+                // fix collapsed groups
+                for ( int i = 0; i < ExpAdapter.getGroupCount(); i++ ) {
+                    expandableListView.expandGroup(i);
+                }
             }
 
             @Override
@@ -277,6 +276,10 @@ public class Reminders extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 ExpAdapter.filter(newText);
+                // fix collapsed groups
+                for ( int i = 0; i < ExpAdapter.getGroupCount(); i++ ) {
+                    expandableListView.expandGroup(i);
+                }
                 return true;
             }
         });

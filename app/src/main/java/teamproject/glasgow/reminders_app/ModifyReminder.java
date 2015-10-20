@@ -1,6 +1,8 @@
 package teamproject.glasgow.reminders_app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -58,6 +60,7 @@ public class ModifyReminder extends AppCompatActivity {
         if(isAddMode) {
             MenuItem item = menu.findItem(R.id.action_delete);
             item.setVisible(false);
+            this.setTitle("Add Reminder");
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -66,16 +69,45 @@ public class ModifyReminder extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id==android.R.id.home) {
-            finish();
+            new AlertDialog.Builder(this)
+                    .setTitle("Discard Changes")
+                    .setMessage("Are you sure you want to go back and discard all changes" )
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // keep page open
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
 
         if (id==R.id.action_delete) {
-            Intent resultIntent = new Intent();
 
-            resultIntent.putExtra("delete", true);
-            resultIntent.putExtra("index",reminderIndex);
-            setResult(Activity.RESULT_OK, resultIntent);
-            finish();
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete reminder")
+                    .setMessage("Are you sure you want to delete " + (getReminder().getName().equals("") ? getReminder().getName() : "this")   + " reminder?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("delete", true);
+                            resultIntent.putExtra("index", reminderIndex);
+                            setResult(Activity.RESULT_OK, resultIntent);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // keep page open
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+
         }
 
         if (id==R.id.action_finish) {
@@ -83,13 +115,31 @@ public class ModifyReminder extends AppCompatActivity {
 
             Reminder reminder = getReminder();
 
-            resultIntent.putExtra("reminder",reminder);
-            resultIntent.putExtra("index",reminderIndex);
-            setResult(Activity.RESULT_OK, resultIntent);
-            finish();
+            if(!isDataValid(reminder)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Entered Reminder not valid")
+                        .setMessage("Please make sure you provide a name and dates for the reminder")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            } else {
+                resultIntent.putExtra("reminder",reminder);
+                resultIntent.putExtra("index",reminderIndex);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
+            }
+
         }
         return true;
 
+    }
+
+    private boolean isDataValid(Reminder reminder) {
+        return !reminder.getName().equals("") && reminder.getOccurrences().size()>0;
     }
 
     public Reminder getReminder() {
