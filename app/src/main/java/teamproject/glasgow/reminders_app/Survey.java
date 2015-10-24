@@ -1,6 +1,8 @@
 package teamproject.glasgow.reminders_app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 
 import org.joda.time.LocalTime;
 
@@ -51,12 +54,37 @@ public class Survey extends AppCompatActivity {
         }
 
         if (id==R.id.action_finish) {
-            PersistencyManager.logSurveyCompletetion(LocalTime.now());
-            finish();
+            if(isSurveyIsCompleted()) {
+                PersistencyManager.logSurveyCompletetion(LocalTime.now());
+                finish();
+            } else {
+                new AlertDialog.Builder(this)
+                        .setTitle("Survey not completed")
+                        .setMessage("Please make sure you answer every question before submitting")
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+
         }
 
         return true;
 
+    }
+
+    private boolean isSurveyIsCompleted() {
+        boolean isCompleted = true;
+        for(int i = 0; i < listView.getChildCount(); i++) {
+            RadioGroup radioGroup = (RadioGroup) listView.getChildAt(i).findViewById(R.id.radio_buttons_survey);
+            if (radioGroup.getCheckedRadioButtonId() == -1) {
+                isCompleted = false;
+            }
+        }
+        return isCompleted;
     }
 
     @Override
