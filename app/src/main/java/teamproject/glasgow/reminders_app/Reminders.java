@@ -28,14 +28,10 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.parse.Parse;
-import com.parse.ParseObject;
-
 import java.util.Calendar;
 
 import Controllers.ParseStorageAdapter;
 import Helpers.AlarmReceiver;
-import Helpers.HelperFunctions;
 import Model.Occurrence;
 import Model.Reminder;
 import Controllers.ExpandListAdapter;
@@ -49,7 +45,7 @@ public class Reminders extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
-    private ParseStorageAdapter test;
+    private ParseStorageAdapter cloudMem;
 
     ExpandListAdapter ExpAdapter;
 
@@ -60,17 +56,9 @@ public class Reminders extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        // Enable Local Datastore.
-//        Parse.enableLocalDatastore(this);
-//        Parse.initialize(this, "ZhmW1AYvR4bRxEl0iqJwxsq4T7mzzByAaEKC6q1c", "w6luIBu0V5B7zT5ShqOsXMmeOoSEMX2ZYexD7WPj");
-//
-//        ParseObject testObject = new ParseObject("TestObject");
-//        testObject.put("foo", "bar");
-//        testObject.saveInBackground();
-
-        test = new ParseStorageAdapter(this);
-//        test.testAddNewTaskToDB();
-//        test.getRemindersFromDB();
+        cloudMem = new ParseStorageAdapter(this);
+//        cloudMem.testAddNewTaskToDB();
+//        cloudMem.getRemindersFromDB();
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
@@ -89,7 +77,8 @@ public class Reminders extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
 //        reminders = HelperFunctions.generateReminderTestData();
-        reminders = test.getRemindersFromDB();
+        reminders = cloudMem.getRemindersFromDB();
+//        cloudMem.searchReminder("a");
 
         ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.ExpList);
 
@@ -210,7 +199,7 @@ public class Reminders extends AppCompatActivity {
                     Reminder reminder =  (Reminder)res.getSerializable("reminder");
                     createAlarmManager(reminder);
                     reminders.addReminder(reminder);
-                    test.addReminderToDB(reminder);
+                    cloudMem.addReminderToDB(reminder);
                 }
                 break;
             case 2: //modify reminder
@@ -219,14 +208,14 @@ public class Reminders extends AppCompatActivity {
                     if (res.getBoolean("delete")) {
                         Integer index =  res.getInt("index");
 //                        Log.d("Nok", "delete " + res.toString());
-                        test.deleteReminderFromDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString());
+                        cloudMem.deleteReminderFromDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString());
                         reminders.removeReminder(index);
                         break;
                     }
                     Reminder reminder =  (Reminder)res.getSerializable("reminder");
                     Integer index =  res.getInt("index");
                     createAlarmManager(reminder);
-                    test.updateReminderOnDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString(), reminder);
+                    cloudMem.updateReminderOnDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString(), reminder);
                     reminders.modifyReminder(reminder, index);
                 }
                 break;

@@ -7,18 +7,21 @@ import com.parse.*;
 
 import org.joda.time.LocalTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Helpers.DAYSOFTHEWEEK;
 import Model.Occurrence;
 import Model.Reminder;
 import Model.Reminders;
+import Model.Task;
+import teamproject.glasgow.reminders_app.Tasks;
 
 /**
  * Created by ttnok on 20/10/2558.
  */
 public class ParseStorageAdapter {
-    private ParseObject reminderDetail = new ParseObject("ReminderList");
+//    private ParseObject reminderDetail = new ParseObject("ReminderList");
 
     public ParseStorageAdapter(Context context){
         // Enable Local Datastore.
@@ -60,10 +63,11 @@ public class ParseStorageAdapter {
                         remindersDB.addReminder(tmpReminder);
 //                        Log.d("Nok", Integer.toString(remindersDB.getReminders().size()));
                     }
+                    Log.d("Nok", "already got all objects");
                 } else {
                     // The network was inaccessible and we have no cached data
                     // for this query.
-                    Log.d("Nok", e.getMessage());
+                    Log.d("Nok", "getReminder: " + e.getMessage());
                 }
             }
         });
@@ -71,7 +75,7 @@ public class ParseStorageAdapter {
 
     }
     public void addReminderToDB(Reminder reminder){
-//        ParseObject reminderDetail = new ParseObject("ReminderList");
+        ParseObject reminderDetail = new ParseObject("ReminderList");
         String title = reminder.getName();
 //        reminderDetail.put("ID", "..");
 //        reminderDetail.put("userID", "..");
@@ -111,15 +115,25 @@ public class ParseStorageAdapter {
                     break;
             }
         }
-        Log.d("Nok", title);
+//        Log.d("Nok", title);
 //        reminderDetail.saveInBackground();
-        reminderDetail.saveEventually();
+        reminderDetail.saveEventually(new SaveCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Saved successfully.
+                    Log.d("Nok", "finish add new object");
+                } else {
+                    // The save failed.
+                    Log.d("Nok", "addReminder: "+ e.getMessage());
+                }
+            }
+        });;
     }
     public void updateReminderOnDB(String title, String time, final Reminder newReminderDetail){
 
 //        final ParseObject reminderDetail = new ParseObject("ReminderList");
         final ParseQuery<ParseObject> query = ParseQuery.getQuery("ReminderList");
-        Log.d("Nok", title + " " + time);
+//        Log.d("Nok", title + " " + time);
         query.whereEqualTo("Title", title);
         query.whereEqualTo("Time", time);
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -180,7 +194,7 @@ public class ParseStorageAdapter {
                 } else {
                     // The network was inaccessible and we have no cached data
                     // for this query.
-                    Log.d("Nok", e.getMessage());
+                    Log.d("Nok", "updateReminder: "+e.getMessage());
                 }
             }
         });
@@ -209,19 +223,77 @@ public class ParseStorageAdapter {
                                 }
                             }
                         });
-                    }else{
+                    } else {
                         Log.d("Nok", "Something wrong >> size in delete reminder object is not equal 1!! >> " + reminder.size());
                     }
 
                 } else {
-
-
+                    Log.d("Nok", "deleteReminder: "+ e.getMessage());
                 }
             }
-                               }
-
-        );
+        });
 
 
-        }
     }
+    public ArrayList<Task> getTaskFromDB(){
+        final ArrayList<Task> tasks = new ArrayList<Task>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ReminderList");
+        //        query.fromLocalDatastore();
+        //        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            //query distinct value still not support from parse
+            public void done(List<ParseObject> reminderList, ParseException e) {
+                if (e == null) {
+                    for (ParseObject reminder : reminderList) {
+                        Task task = new Task(reminder.getString("Title"));
+                        tasks.add(task);
+//                        Log.d("Nok", "getTask size: "+tasks.size());
+                    }
+
+                } else {
+                    Log.d("Nok", "getTask: "+ e.getMessage());
+                }
+            }
+        });
+        return tasks;
+    }
+    public Reminders searchReminder(String text){
+        final Reminders searchReminder= new Reminders();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ReminderList");
+        //        query.fromLocalDatastore();
+        //        query.setCachePolicy(ParseQuery.CachePolicy.NETWORK_ELSE_CACHE);
+        query.whereContains("Title", text);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            //query distinct value still not support from parse
+            //no case insensitive queries >> parse not support
+            public void done(List<ParseObject> searchList, ParseException e) {
+                if (e == null) {
+                    Reminder tmpSearch;
+                    for (ParseObject search : searchList) {
+                        tmpSearch = new Reminder(search.getString("Title"));
+//                        Log.d("Nok", tmpReminder.getName());
+                        int hour = Integer.parseInt(search.getString("Time").substring(0, 2));
+                        int min = Integer.parseInt(search.getString("Time").substring(3, 5));
+                        for (DAYSOFTHEWEEK d : DAYSOFTHEWEEK.values()) {
+                            String colName = d.name().substring(0, 1) + d.name().toLowerCase().substring(1, 3);
+//                            Log.d("Nok",colName+" "+reminder.getInt(colName));
+                            if (search.getInt(colName) >= 1) {
+                                tmpSearch.addOccurrence(new Occurrence(d, new LocalTime(hour, min), tmpSearch));
+//                                Log.d("Nok", Integer.toString(tmpReminder.getOccurrences().size()));
+                            }
+                        }
+                        searchReminder.addReminder(tmpSearch);
+//                        Log.d("Nok", tmpSearch.getName());
+                    }
+                    Log.d("Nok", "already got all search objects");
+
+
+                } else {
+                    Log.d("Nok", "getTask: "+ e.getMessage());
+                }
+            }
+        });
+        return searchReminder;
+
+    }
+}
