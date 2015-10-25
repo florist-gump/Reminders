@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':Parse-1.10.3'
 include ':libraries:joda-time-2.8.2'
