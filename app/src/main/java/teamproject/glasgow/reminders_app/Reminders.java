@@ -1,8 +1,12 @@
 package teamproject.glasgow.reminders_app;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -16,7 +20,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Display;
 import android.view.MenuInflater;
 import android.view.View;
@@ -31,7 +34,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import Controllers.ParseStorageAdapter;
-import Helpers.AlarmReceiver;
+import Helpers.PersistencyManager;
 import Model.Occurrence;
 import Model.Reminder;
 import Controllers.ExpandListAdapter;
@@ -47,8 +50,10 @@ public class Reminders extends AppCompatActivity {
     private String mActivityTitle;
     private ParseStorageAdapter cloudMem;
 
-    ExpandListAdapter ExpAdapter;
-    ExpandableListView expandableListView;
+    private ExpandListAdapter ExpAdapter;
+    private ExpandableListView expandableListView;
+
+    private BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +154,44 @@ public class Reminders extends AppCompatActivity {
         white.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         fab.setImageDrawable(white);
 
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("Finish");
+        filter.addAction("Postpone");
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Toast.makeText(Reminders.this, "Received!", Toast.LENGTH_SHORT).show();
+                if (intent.getAction().equals("Finish")) {
+                    Toast.makeText(Reminders.this, "Finshed!", Toast.LENGTH_SHORT).show();
+                    Reminder reminder = (Reminder)intent.getSerializableExtra("Reminder");
+                    int notificationID = intent.getIntExtra("notificationID",0);
+                    NotificationManager notificationManager = (NotificationManager) context
+                            .getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(notificationID);
+                    PersistencyManager.logTaskCompletetion(reminder.getTask());
+                }
+                if (intent.getAction().equals("Postpone")) {
+                    Toast.makeText(Reminders.this, "Postpone!", Toast.LENGTH_SHORT).show();
+                    Reminder reminder = (Reminder)intent.getSerializableExtra("Reminder");
+                    Occurrence occurrence = (Occurrence)intent.getSerializableExtra("Occurrence");
+                    int notificationID = intent.getIntExtra("notificationID",0);
+                    NotificationManager notificationManager = (NotificationManager) context
+                            .getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(notificationID);
+                    Intent intent1 = new Intent(Reminders.this, AlarmReceiver.class);
+                    intent1.putExtra("Reminder", reminder);
+                    intent1.putExtra("Occurrence", occurrence);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(Reminders.this,(int) System.currentTimeMillis(), intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+                    AlarmManager am = (AlarmManager) Reminders.this.getSystemService(Reminders.this.ALARM_SERVICE);
+                    am.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + 600000, pendingIntent);
+
+                }
+            }
+        };
+
+        registerReceiver(receiver, filter);
+        //unregisterReceiver(receiver);
     }
 
     private void addDrawerItems() {
@@ -230,10 +273,27 @@ public class Reminders extends AppCompatActivity {
             calendar.set(Calendar.HOUR_OF_DAY, o.getTime().getHourOfDay());
             calendar.set(Calendar.MINUTE, o.getTime().getMinuteOfHour());
             calendar.set(Calendar.SECOND, o.getTime().getSecondOfMinute());
+            calendar.set(Calendar.MILLISECOND, o.getTime().getMillisOfSecond());
             Intent intent1 = new Intent(Reminders.this, AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(Reminders.this, 0,intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            intent1.putExtra("Reminder", reminder);
+            intent1.putExtra("Occurrence", o);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(Reminders.this,0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager am = (AlarmManager) Reminders.this.getSystemService(Reminders.this.ALARM_SERVICE);
-            am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+        }
+    }
+
+    private void deleteAlarmManager(Reminder reminder) {
+        Calendar calendar = Calendar.getInstance();
+        for (Occurrence o : reminder.getOccurrences()) {
+            calendar.set(Calendar.HOUR_OF_DAY, o.getTime().getHourOfDay());
+            calendar.set(Calendar.MINUTE, o.getTime().getMinuteOfHour());
+            calendar.set(Calendar.SECOND, o.getTime().getSecondOfMinute());
+            calendar.set(Calendar.MILLISECOND, o.getTime().getMillisOfSecond());
+            Intent intent1 = new Intent(Reminders.this, AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(Reminders.this,0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager am = (AlarmManager) Reminders.this.getSystemService(Reminders.this.ALARM_SERVICE);
+            am.cancel(pendingIntent);
         }
     }
 
@@ -324,5 +384,7 @@ public class Reminders extends AppCompatActivity {
 
         }
     }
+
+
 
 }

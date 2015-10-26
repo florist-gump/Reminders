@@ -11,6 +11,7 @@ import java.util.Collections;
 public class Reminder implements Serializable {
     private String name;
     private ArrayList<Occurrence> occurrences;
+    private Task task;
 
     public Reminder(String name) {
         this.name = name;
@@ -44,5 +45,13 @@ public class Reminder implements Serializable {
 
     public void sortOccurrences() {
         Collections.sort(occurrences);
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 }

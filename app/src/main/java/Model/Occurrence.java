@@ -11,11 +11,13 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
     private DAYSOFTHEWEEK day;
     private LocalTime time;
     private Reminder reminder;
+    private Boolean isActive;
 
     public Occurrence(DAYSOFTHEWEEK day, LocalTime time, Reminder reminder) {
         this.day = day;
         this.time = time;
         this.reminder = reminder;
+        isActive = true;
     }
 
     public DAYSOFTHEWEEK getDay() {
@@ -40,6 +42,14 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
 
     public void setReminder(Reminder reminder) {
         this.reminder = reminder;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     @Override

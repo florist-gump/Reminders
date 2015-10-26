@@ -237,7 +237,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
 
                     mDownView.animate()
                             .translationX(dismissRight ? mViewWidth : -mViewWidth)
-                            .alpha(0)
+                            //.alpha(0)
                             .setDuration(mAnimationTime)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
@@ -291,8 +291,11 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                     mDownView.setTranslationX(deltaX - mSwipingSlop);
                     //mDownView.setAlpha(Math.max(0f, Math.min(1f,
                     //        1f + 2f * Math.abs(deltaX) / mViewWidth)));
-                    mDownViewBackground.setBackgroundColor(Color.parseColor("#08E700"));
-                    mDownViewBackground.setAlpha(Math.min(1f, Math.min(1f, 1.1f * Math.abs(deltaX) / mViewWidth)));
+                    if(deltaX/mViewWidth > 0.06) {
+                        mDownViewBackground.setBackgroundColor(Color.parseColor("#08E700"));
+                        mDownViewBackground.setAlpha(Math.min(1f, Math.min(1f, 1.1f * Math.abs(deltaX) / mViewWidth)));
+                        mDownView.setAlpha(1f);
+                    }
                     return true;
                 }
                 break;
