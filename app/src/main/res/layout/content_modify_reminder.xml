@@ -18,102 +18,33 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/layout_bg"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/reminder_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:background="@drawable/layout_bg"
-                android:orientation="vertical" >
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:hint="@string/new_reminder" />
 
-                <EditText
-                    android:id="@+id/reminder_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:singleLine="true"
-                    android:imeOptions="actionDone"
-                    android:hint="@string/new_reminder" />
+        </LinearLayout>
 
-            </LinearLayout>
+        <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*"
+            android:id="@+id/modify_reminders_table">
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:background="@drawable/layout_bg"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical" >
-
-                <TimePicker android:id="@+id/time_picker"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:background="@drawable/layout_bg"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal" >
-
-                <CheckBox
-                    android:id="@+id/check_mo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mo"
-                    android:checked="false" />
-
-                <CheckBox
-                    android:id="@+id/check_tu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tu"
-                    android:checked="false" />
-
-                <CheckBox
-                    android:id="@+id/check_we"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="We"
-                    android:checked="false" />
-
-                <CheckBox
-                    android:id="@+id/check_th"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Th"
-                    android:checked="false" />
-
-                <CheckBox
-                    android:id="@+id/check_fr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fr"
-                    android:checked="false" />
-
-                <CheckBox
-                    android:id="@+id/check_sa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sa"
-                    android:checked="false" />
-
-                <CheckBox
-                    android:id="@+id/check_su"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Su"
-                    android:checked="false" />
-
-            </LinearLayout>
+        </TableLayout>
 
         </LinearLayout>
 

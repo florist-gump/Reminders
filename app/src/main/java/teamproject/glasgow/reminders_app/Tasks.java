@@ -46,14 +46,16 @@ public class Tasks extends AppCompatActivity {
                         new SwipeDismissListViewTouchListener.DismissCallbacks() {
                             @Override
                             public boolean canDismiss(int position) {
-                                return true;
+                                Task task = adapter.getItem(position);
+                                return task.canTaskBeLogged();
                             }
 
                             @Override
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    Toast.makeText(getApplicationContext(), "Task completed", Toast.LENGTH_SHORT).show();
-                                    PersistencyManager.logTaskCompletetion(adapter.getItem(position));
+                                    Task task = adapter.getItem(position);
+                                    Toast.makeText(getApplicationContext(), "Task " + task.getName() + " completed", Toast.LENGTH_SHORT).show();
+                                    task.logTaskCompletetion();
                                 }
                             }
                         });

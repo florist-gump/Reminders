@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/layout_bg"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical" >
+
+        <TimePicker android:id="@+id/time_picker"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:id="@+id/check_mo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mo"
+                android:checked="false" />
+
+            <CheckBox
+                android:id="@+id/check_tu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tu"
+                android:checked="false" />
+
+            <CheckBox
+                android:id="@+id/check_we"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="We"
+                android:checked="false" />
+
+            <CheckBox
+                android:id="@+id/check_th"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Th"
+                android:checked="false" />
+
+            <CheckBox
+                android:id="@+id/check_fr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fr"
+                android:checked="false" />
+
+            <CheckBox
+                android:id="@+id/check_sa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sa"
+                android:checked="false" />
+
+            <CheckBox
+                android:id="@+id/check_su"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Su"
+                android:checked="false" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <at.markushi.ui.CircleButton
+                android:layout_width="48dip"
+                android:layout_height="48dip"
+                android:src="@drawable/ic_add_circle_outline_white_48dp"
+                app:cb_color="#FFA500"
+                app:cb_pressedRingWidth="8dip"
+                android:id="@+id/add_modify_reminder_row"/>
+
+            <at.markushi.ui.CircleButton
+                android:layout_width="48dip"
+                android:layout_height="48dip"
+                android:src="@drawable/ic_remove_circle_outline_white_48dp"
+                app:cb_color="#FFA500"
+                app:cb_pressedRingWidth="8dip"
+                android:id="@+id/remove_modify_reminder_row"/>/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</TableRow>

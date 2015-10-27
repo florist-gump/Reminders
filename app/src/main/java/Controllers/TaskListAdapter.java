@@ -46,4 +46,9 @@ public class TaskListAdapter extends ArrayAdapter<Task> {
         }
         return v;
     }
+
+    @Override
+    public boolean isEnabled (int position) {
+        return false;
+    }
 }

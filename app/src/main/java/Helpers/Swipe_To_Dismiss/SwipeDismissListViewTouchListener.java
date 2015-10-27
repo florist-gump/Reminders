@@ -24,6 +24,7 @@ import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -63,6 +64,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
     private int mDownPosition;
     private View mDownView;
     private View mDownViewBackground;
+    private Drawable origionalBackground;
     private boolean mPaused;
 
 
@@ -165,7 +167,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                     if (rect.contains(x, y)) {
                         mDownView = child.findViewById(R.id.task_text);
                         mDownViewBackground = child;
-                        mDownViewBackground.setBackgroundColor(Color.WHITE);
+                        origionalBackground = mDownViewBackground.getBackground();
                         break;
                     }
                 }
@@ -193,7 +195,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                     // cancel
                     mDownView.animate()
                             .translationX(0)
-                            .alpha(1)
+                            //.alpha(1)
                             .setDuration(mAnimationTime)
                             .setListener(null);
                 }
@@ -213,6 +215,10 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                 }
 
                 float deltaX = motionEvent.getRawX() - mDownX;
+
+                if (deltaX < 0) {
+                    break;
+                }
                 mVelocityTracker.addMovement(motionEvent);
                 mVelocityTracker.computeCurrentVelocity(1000);
                 float velocityX = mVelocityTracker.getXVelocity();
@@ -237,7 +243,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
 
                     mDownView.animate()
                             .translationX(dismissRight ? mViewWidth : -mViewWidth)
-                            //.alpha(0)
+                            //.alpha(1)
                             .setDuration(mAnimationTime)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
@@ -249,9 +255,10 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                     // cancel
                     mDownView.animate()
                             .translationX(0)
-                            .alpha(1)
+                            //.alpha(1)
                             .setDuration(mAnimationTime)
                             .setListener(null);
+                    mDownViewBackground.setBackground(origionalBackground);
                 }
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
@@ -260,7 +267,6 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                 mDownView = null;
                 mDownPosition = ListView.INVALID_POSITION;
                 mSwiping = false;
-                mDownViewBackground.setBackgroundColor(Color.WHITE);
                 break;
             }
 
@@ -278,7 +284,6 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                     mListView.requestDisallowInterceptTouchEvent(true);
 
                     // Cancel ListView's touch (un-highlighting the item)
-                    //mDownViewBackground.setBackgroundColor(Color.WHITE);
                     MotionEvent cancelEvent = MotionEvent.obtain(motionEvent);
                     cancelEvent.setAction(MotionEvent.ACTION_CANCEL |
                             (motionEvent.getActionIndex()
@@ -288,15 +293,16 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                 }
 
                 if (mSwiping) {
-                    mDownView.setTranslationX(deltaX - mSwipingSlop);
-                    //mDownView.setAlpha(Math.max(0f, Math.min(1f,
-                    //        1f + 2f * Math.abs(deltaX) / mViewWidth)));
-                    if(deltaX/mViewWidth > 0.06) {
-                        mDownViewBackground.setBackgroundColor(Color.parseColor("#08E700"));
-                        mDownViewBackground.setAlpha(Math.min(1f, Math.min(1f, 1.1f * Math.abs(deltaX) / mViewWidth)));
-                        mDownView.setAlpha(1f);
+                    if(mSwipingSlop > 0) {
+                        mDownView.setTranslationX(deltaX - mSwipingSlop);
+                        if(deltaX/mViewWidth > 0.06) {
+                            //mDownViewBackground.setBackgroundColor(Color.parseColor("#08E700"));
+                            //mDownViewBackground.setAlpha(Math.min(1f, 1.1f * Math.abs(deltaX) / mViewWidth)));
+                            Integer color = Color.argb(Math.min(255, (int)( 255 * Math.abs(deltaX) / mViewWidth)),57,239,30);
+                            mDownViewBackground.setBackgroundColor(color);
+                        }
+                        return true;
                     }
-                    return true;
                 }
                 break;
             }
@@ -325,7 +331,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
         // all dismissed list item animations have completed. This triggers layout on each animation
         // frame; in the future we may want to do something smarter and more performant.
 
-        mDownViewBackground.setBackgroundColor(Color.parseColor("#08E700"));
+        mDownViewBackground.setBackgroundColor(Color.parseColor("#57EF1E"));
 
         final ViewGroup.LayoutParams lp = dismissView.getLayoutParams();
         final int originalHeight = dismissView.getHeight();
