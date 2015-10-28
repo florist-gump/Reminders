@@ -298,7 +298,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
                         if(deltaX/mViewWidth > 0.06) {
                             //mDownViewBackground.setBackgroundColor(Color.parseColor("#08E700"));
                             //mDownViewBackground.setAlpha(Math.min(1f, 1.1f * Math.abs(deltaX) / mViewWidth)));
-                            Integer color = Color.argb(Math.min(255, (int)( 255 * Math.abs(deltaX) / mViewWidth)),57,239,30);
+                            Integer color = Color.argb(Math.min(255, (int)( 255 * Math.abs(deltaX) / mViewWidth)),31,183,55);
                             mDownViewBackground.setBackgroundColor(color);
                         }
                         return true;
@@ -331,7 +331,7 @@ public class SwipeDismissListViewTouchListener implements View.OnTouchListener {
         // all dismissed list item animations have completed. This triggers layout on each animation
         // frame; in the future we may want to do something smarter and more performant.
 
-        mDownViewBackground.setBackgroundColor(Color.parseColor("#57EF1E"));
+        mDownViewBackground.setBackgroundColor(Color.parseColor("#31B755"));
 
         final ViewGroup.LayoutParams lp = dismissView.getLayoutParams();
         final int originalHeight = dismissView.getHeight();

@@ -11,10 +11,12 @@
         android:paddingRight="16dp"
         android:background="@drawable/layout_bg"
         android:layout_marginTop="10dp"
+        android:layout_weight="1"
         android:orientation="vertical" >
 
         <TimePicker android:id="@+id/time_picker"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="wrap_content"
             />
 
@@ -27,54 +29,147 @@
             android:gravity="center"
             android:orientation="horizontal" >
 
-            <CheckBox
-                android:id="@+id/check_mo"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mo"
-                android:checked="false" />
+                android:orientation="vertical">
 
-            <CheckBox
-                android:id="@+id/check_tu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tu"
-                android:checked="false" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Mo"/>
 
-            <CheckBox
-                android:id="@+id/check_we"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="We"
-                android:checked="false" />
+                <CheckBox
+                    android:id="@+id/check_mo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:checked="false" />
 
-            <CheckBox
-                android:id="@+id/check_th"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Th"
-                android:checked="false" />
+            </LinearLayout>
 
-            <CheckBox
-                android:id="@+id/check_fr"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fr"
-                android:checked="false" />
+                android:orientation="vertical">
 
-            <CheckBox
-                android:id="@+id/check_sa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sa"
-                android:checked="false" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Tu"/>
 
-            <CheckBox
-                android:id="@+id/check_su"
+                <CheckBox
+                    android:id="@+id/check_tu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:checked="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Su"
-                android:checked="false" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="We"/>
+
+                <CheckBox
+                    android:id="@+id/check_we"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:checked="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Th"/>
+
+                <CheckBox
+                    android:id="@+id/check_th"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:checked="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Fr"/>
+
+                <CheckBox
+                    android:id="@+id/check_fr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:checked="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Sa"/>
+
+                <CheckBox
+                    android:id="@+id/check_sa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:checked="false" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Su"/>
+
+                <CheckBox
+                    android:id="@+id/check_su"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:checked="false" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
