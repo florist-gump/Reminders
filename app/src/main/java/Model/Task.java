@@ -3,12 +3,14 @@ package Model;
 import org.joda.time.LocalTime;
 import org.joda.time.Minutes;
 
+import java.io.Serializable;
+
 import Helpers.PersistencyManager;
 
 /**
  * Created by Flo on 16/10/15.
  */
-public class Task {
+public class Task implements Serializable {
 
     private String name;
     private LocalTime lastCompletionLog;

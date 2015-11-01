@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -22,9 +23,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
@@ -34,6 +35,8 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 import Controllers.ParseStorageAdapter;
+import Helpers.AlarmSetter;
+import Helpers.HelperFunctions;
 import Helpers.PersistencyManager;
 import Model.Occurrence;
 import Model.Reminder;
@@ -41,7 +44,7 @@ import Controllers.ExpandListAdapter;
 
 public class Reminders extends AppCompatActivity {
 
-    Model.Reminders reminders;
+    private Model.Reminders reminders;
 
     private ListView mDrawerList;
     private ArrayAdapter<String> mAdapter;
@@ -54,27 +57,27 @@ public class Reminders extends AppCompatActivity {
     private ExpandableListView expandableListView;
 
     private BroadcastReceiver receiver;
+    public static Reminders _reminders;
+
+    private SharedPreferences prefs = null;
+    private int UserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        prefs = getSharedPreferences("teamproject.glasgow.reminders_app", MODE_PRIVATE);
+
         setContentView(R.layout.activity_reminders);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        cloudMem = new ParseStorageAdapter(this);
+        //cloudMem = new ParseStorageAdapter(this);
 //        cloudMem.testAddNewTaskToDB();
 //        cloudMem.getRemindersFromDB();
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
         mDrawerList = (ListView) findViewById(R.id.navList);
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(Reminders.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         addDrawerItems();
         setupDrawer();
@@ -82,8 +85,14 @@ public class Reminders extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-//        reminders = HelperFunctions.generateReminderTestData();
-        reminders = cloudMem.getRemindersFromDB();
+        if (prefs.getBoolean("firstrun", true)) {
+            reminders = HelperFunctions.generateReminderInitData();
+        }
+        else {
+            reminders = PersistencyManager.getReminders();
+        }
+
+        //reminders = cloudMem.getRemindersFromDB();
 //        cloudMem.searchReminder("a");
 
         expandableListView = (ExpandableListView) findViewById(R.id.ExpList);
@@ -102,21 +111,6 @@ public class Reminders extends AppCompatActivity {
             expandableListView.expandGroup(i);
         }
 
-        /*
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                if (!parent.isGroupExpanded(groupPosition)) {
-                    parent.expandGroup(groupPosition);
-                } else {
-                    parent.collapseGroup(groupPosition);
-                }
-
-                return true;
-            }
-        });
-        */
 
         expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
@@ -129,6 +123,7 @@ public class Reminders extends AppCompatActivity {
                 Reminder reminder = occurrence.getReminder();
                 intent.putExtra("reminder", reminder);
                 intent.putExtra("index", reminders.getReminders().indexOf(reminder));
+                AlarmSetter.cancelRepeatingAlarmForReminder(reminder, null);
                 startActivityForResult(intent, 2);
                 return true;
             }
@@ -154,44 +149,27 @@ public class Reminders extends AppCompatActivity {
         white.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         fab.setImageDrawable(white);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("Finish");
-        filter.addAction("Postpone");
+        _reminders = this;
+        MyApp.setReminders(reminders);
+        UserID = MyApp.getUserID();
+    }
 
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Toast.makeText(Reminders.this, "Received!", Toast.LENGTH_SHORT).show();
-                if (intent.getAction().equals("Finish")) {
-                    Toast.makeText(Reminders.this, "Finshed!", Toast.LENGTH_SHORT).show();
-                    Reminder reminder = (Reminder)intent.getSerializableExtra("Reminder");
-                    int notificationID = intent.getIntExtra("notificationID",0);
-                    NotificationManager notificationManager = (NotificationManager) context
-                            .getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(notificationID);
-                    PersistencyManager.logTaskCompletetion(reminder.getTask());
-                }
-                if (intent.getAction().equals("Postpone")) {
-                    Toast.makeText(Reminders.this, "Postpone!", Toast.LENGTH_SHORT).show();
-                    Reminder reminder = (Reminder)intent.getSerializableExtra("Reminder");
-                    Occurrence occurrence = (Occurrence)intent.getSerializableExtra("Occurrence");
-                    int notificationID = intent.getIntExtra("notificationID",0);
-                    NotificationManager notificationManager = (NotificationManager) context
-                            .getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(notificationID);
-                    Intent intent1 = new Intent(Reminders.this, AlarmReceiver.class);
-                    intent1.putExtra("Reminder", reminder);
-                    intent1.putExtra("Occurrence", occurrence);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(Reminders.this,(int) System.currentTimeMillis(), intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-                    AlarmManager am = (AlarmManager) Reminders.this.getSystemService(Reminders.this.ALARM_SERVICE);
-                    am.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + 600000, pendingIntent);
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        PersistencyManager.saveReminders(reminders);
+    }
 
-                }
-            }
-        };
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        registerReceiver(receiver, filter);
-        //unregisterReceiver(receiver);
+        if (prefs.getBoolean("firstrun", true)) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);;
+            intent.setClassName("teamproject.glasgow.reminders_app", "teamproject.glasgow.reminders_app.ExperimentSetup");
+            startActivity(intent);
+            prefs.edit().putBoolean("firstrun", false).commit();
+        }
     }
 
     private void addDrawerItems() {
@@ -208,13 +186,13 @@ public class Reminders extends AppCompatActivity {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 //getSupportActionBar().setTitle("Navigation");
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
             }
 
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 getSupportActionBar().setTitle(mActivityTitle);
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
             }
         };
         mDrawerToggle.setDrawerIndicatorEnabled(true);
@@ -242,9 +220,8 @@ public class Reminders extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     Bundle res = data.getExtras();
                     Reminder reminder =  (Reminder)res.getSerializable("reminder");
-                    createAlarmManager(reminder);
                     reminders.addReminder(reminder);
-                    cloudMem.addReminderToDB(reminder);
+                    //cloudMem.addReminderToDB(reminder);
                 }
                 break;
             case 2: //modify reminder
@@ -253,47 +230,16 @@ public class Reminders extends AppCompatActivity {
                     if (res.getBoolean("delete")) {
                         Integer index =  res.getInt("index");
 //                        Log.d("Nok", "delete " + res.toString());
-                        cloudMem.deleteReminderFromDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString());
+                        //cloudMem.deleteReminderFromDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString());
                         reminders.removeReminder(index);
                         break;
                     }
                     Reminder reminder =  (Reminder)res.getSerializable("reminder");
                     Integer index =  res.getInt("index");
-                    createAlarmManager(reminder);
-                    cloudMem.updateReminderOnDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString(), reminder);
+                    //cloudMem.updateReminderOnDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString(), reminder);
                     reminders.modifyReminder(reminder, index);
                 }
                 break;
-        }
-    }
-
-    private void createAlarmManager(Reminder reminder) {
-        Calendar calendar = Calendar.getInstance();
-        for (Occurrence o : reminder.getOccurrences()) {
-            calendar.set(Calendar.HOUR_OF_DAY, o.getTime().getHourOfDay());
-            calendar.set(Calendar.MINUTE, o.getTime().getMinuteOfHour());
-            calendar.set(Calendar.SECOND, o.getTime().getSecondOfMinute());
-            calendar.set(Calendar.MILLISECOND, o.getTime().getMillisOfSecond());
-            Intent intent1 = new Intent(Reminders.this, AlarmReceiver.class);
-            intent1.putExtra("Reminder", reminder);
-            intent1.putExtra("Occurrence", o);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(Reminders.this,0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) Reminders.this.getSystemService(Reminders.this.ALARM_SERVICE);
-            am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
-        }
-    }
-
-    private void deleteAlarmManager(Reminder reminder) {
-        Calendar calendar = Calendar.getInstance();
-        for (Occurrence o : reminder.getOccurrences()) {
-            calendar.set(Calendar.HOUR_OF_DAY, o.getTime().getHourOfDay());
-            calendar.set(Calendar.MINUTE, o.getTime().getMinuteOfHour());
-            calendar.set(Calendar.SECOND, o.getTime().getSecondOfMinute());
-            calendar.set(Calendar.MILLISECOND, o.getTime().getMillisOfSecond());
-            Intent intent1 = new Intent(Reminders.this, AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(Reminders.this,0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) Reminders.this.getSystemService(Reminders.this.ALARM_SERVICE);
-            am.cancel(pendingIntent);
         }
     }
 
@@ -308,6 +254,10 @@ public class Reminders extends AppCompatActivity {
             return true;
         }
 
+        if (id==R.id.action_search) {
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -317,7 +267,7 @@ public class Reminders extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_reminders, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
 
@@ -327,7 +277,7 @@ public class Reminders extends AppCompatActivity {
             public void onViewDetachedFromWindow(View arg0) {
                 ExpAdapter.removeFilter();
                 // fix collapsed groups
-                for ( int i = 0; i < ExpAdapter.getGroupCount(); i++ ) {
+                for (int i = 0; i < ExpAdapter.getGroupCount(); i++) {
                     expandableListView.expandGroup(i);
                 }
             }
@@ -349,7 +299,7 @@ public class Reminders extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 ExpAdapter.filter(newText);
                 // fix collapsed groups
-                for ( int i = 0; i < ExpAdapter.getGroupCount(); i++ ) {
+                for (int i = 0; i < ExpAdapter.getGroupCount(); i++) {
                     expandableListView.expandGroup(i);
                 }
                 return true;
@@ -384,7 +334,4 @@ public class Reminders extends AppCompatActivity {
 
         }
     }
-
-
-
 }

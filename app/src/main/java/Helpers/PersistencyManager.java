@@ -1,22 +1,30 @@
 package Helpers;
 
-import org.joda.time.LocalTime;
-
 import java.util.ArrayList;
 
+import Model.Reminders;
 import Model.SurveyQuestion;
 import Model.Task;
+import teamproject.glasgow.reminders_app.MyApp;
 
 /**
  * Created by Flo on 17/10/15.
  */
 public abstract class PersistencyManager {
 
-    public static ArrayList<SurveyQuestion> getSurveyQuestions() {
-        return createDummySurveyQuestions();
+    public static Reminders getReminders() {
+        return HelperFunctions.generateReminderDummmyData();
+        //replace with data from DB
+    }
+    public static void saveReminders(Reminders reminders) {
+        //save reminders including all associated objects (Tasks, Occurrences)
     }
 
-    private static ArrayList<SurveyQuestion> createDummySurveyQuestions() {
+    public static ArrayList<SurveyQuestion> getSurveyQuestions() {
+        return createSurveyQuestions();
+    }
+
+    private static ArrayList<SurveyQuestion> createSurveyQuestions() {
         ArrayList<SurveyQuestion> questions = new ArrayList<SurveyQuestion>();
 
         SurveyQuestion question = new SurveyQuestion("How is your mood",0);
@@ -35,10 +43,10 @@ public abstract class PersistencyManager {
     }
 
     public static ArrayList<Task> getTasks() {
-        return createDummyTasks();
+        return createTasks();
     }
 
-    private static ArrayList<Task> createDummyTasks() {
+    private static ArrayList<Task> createTasks() {
         ArrayList<Task> tasks = new ArrayList<Task>();
         Task task = new Task("Take Multivitamin");
         tasks.add(task);
@@ -61,11 +69,18 @@ public abstract class PersistencyManager {
         return tasks;
     }
 
-    public static void logSurveyCompletetion(LocalTime time) {
+    public static void logSurveyCompletetion() {
         // log completion of survey
+        // to get userID call MyApp.getUserID();
+    }
+
+    public static void logAlert(Task task) {
+        // log alart raised
+        // to get userID call MyApp.getUserID();
     }
 
     public static void logTaskCompletetion(Task task) {
         // log task completion
+        // to get userID call MyApp.getUserID();
     }
 }

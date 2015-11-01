@@ -4,7 +4,10 @@ package Model; /**
 import org.joda.time.LocalTime;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import Helpers.AlarmSetter;
 import Helpers.DAYSOFTHEWEEK;
 
 public class Occurrence implements Comparable<Occurrence>, Serializable {
@@ -12,12 +15,16 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
     private LocalTime time;
     private Reminder reminder;
     private Boolean isActive;
+    private List<Integer> alarmIds;
+    private int notificationFrequency;
 
-    public Occurrence(DAYSOFTHEWEEK day, LocalTime time, Reminder reminder) {
+    public Occurrence(DAYSOFTHEWEEK day, LocalTime time, Reminder reminder, int notificationFrequency ) {
         this.day = day;
         this.time = time;
         this.reminder = reminder;
         isActive = true;
+        alarmIds = new ArrayList<Integer>();
+        this.notificationFrequency = notificationFrequency;
     }
 
     public DAYSOFTHEWEEK getDay() {
@@ -34,6 +41,7 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
 
     public void setTime(LocalTime time) {
         this.time = time;
+        updateAlarms();
     }
 
     public Reminder getReminder() {
@@ -52,6 +60,23 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
         this.isActive = isActive;
     }
 
+    public List<Integer> getAlarmIds() {
+        return alarmIds;
+    }
+
+    public void setAlarmIds(List<Integer> alarmIds) {
+        this.alarmIds = alarmIds;
+    }
+
+    public int getNotificationFrequency() {
+        return notificationFrequency;
+    }
+
+    public void setNotificationFrequency(int notificationFrequency) {
+        this.notificationFrequency = notificationFrequency;
+        updateAlarms();
+    }
+
     @Override
     public int compareTo(Occurrence another) {
         int i = day.compareTo(another.day);
@@ -61,5 +86,10 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
         if (i != 0) return i;
 
         return 0;
+    }
+
+    public void updateAlarms() {
+        AlarmSetter.cancleAllAlarmsForOccurrence(this,null);
+        AlarmSetter.setAllAlarmsForOccurrence(this,null);
     }
 }

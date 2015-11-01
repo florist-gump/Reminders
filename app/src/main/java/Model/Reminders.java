@@ -2,6 +2,7 @@ package Model;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
+import Helpers.AlarmSetter;
 import Helpers.DAYSOFTHEWEEK;
 
 
@@ -19,6 +21,7 @@ import Helpers.DAYSOFTHEWEEK;
  */
 public class Reminders extends Observable {
     private ArrayList<Reminder> reminders;
+
 
     public Reminders() {
         reminders = new ArrayList<Reminder>();
@@ -34,12 +37,14 @@ public class Reminders extends Observable {
 
     public void addReminder(Reminder reminder) {
         this.reminders.add(reminder);
+        AlarmSetter.setRepeatingAlarmForReminder(reminder,null);
         setChanged();
         notifyObservers();
     }
 
     public void modifyReminder(Reminder reminder, int index) {
         this.reminders.set(index, reminder);
+        AlarmSetter.setRepeatingAlarmForReminder(reminder, null);
         setChanged();
         notifyObservers();
     }
@@ -47,11 +52,13 @@ public class Reminders extends Observable {
 
     public void removeReminder(Reminder reminder) {
         this.reminders.remove(reminder);
+        AlarmSetter.cancelRepeatingAlarmForReminder(reminder, null);
         setChanged();
         notifyObservers();
     }
 
     public void removeReminder(int index) {
+        AlarmSetter.cancelRepeatingAlarmForReminder(this.reminders.get(index), null);
         this.reminders.remove(index);
         setChanged();
         notifyObservers();

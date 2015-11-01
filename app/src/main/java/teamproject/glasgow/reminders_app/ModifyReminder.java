@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import Helpers.DAYSOFTHEWEEK;
+import Helpers.PersistencyManager;
 import Model.Occurrence;
 import Model.Reminder;
 import at.markushi.ui.CircleButton;
@@ -38,6 +39,8 @@ public class ModifyReminder extends AppCompatActivity {
     private int reminderIndex;
     private TableLayout tableLayout;
     private Context context;
+    private Reminder reminder;
+    private int notificationFrequency = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +65,9 @@ public class ModifyReminder extends AppCompatActivity {
                 break;
             case "modify_reminder":
                 isAddMode = false;
-                Reminder reminder = (Reminder) res.getSerializable("reminder");
+                reminder = (Reminder) res.getSerializable("reminder");
                 reminderIndex = res.getInt("index");
+                notificationFrequency = reminder.getOccurrences().get(0).getNotificationFrequency();
                 addPrefilledRows(reminder);
                 break;
         }
@@ -105,9 +109,18 @@ public class ModifyReminder extends AppCompatActivity {
 
         if (id==R.id.action_delete) {
 
+            String message;
+            if(reminder.getTask() != null) {
+                message = (reminder.getName().equals("") ?  "This Reminder" : reminder.getName()) + " has a Task associated, are you sure you want to delete it?" ;
+            }
+            else {
+                message = "Are you sure you want to delete " + (reminder.getName().equals("") ? "this" : reminder.getName()) + " reminder?";
+
+            }
+
             new AlertDialog.Builder(this)
-                    .setTitle("Delete reminder")
-                    .setMessage("Are you sure you want to delete " + (getReminder().getName().equals("") ? getReminder().getName() : "this")   + " reminder?")
+                    .setTitle("Delete Reminder")
+                    .setMessage(message)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             Intent resultIntent = new Intent();
@@ -174,39 +187,47 @@ public class ModifyReminder extends AppCompatActivity {
 
             LocalTime time = new LocalTime(timePicker.getCurrentHour(),timePicker.getCurrentMinute());
 
+            Occurrence o;
             CheckBox checkBox = (CheckBox) row.findViewById(R.id.check_mo);
             if(checkBox.isChecked()) {
-                reminder.addOccurrence(new Occurrence(DAYSOFTHEWEEK.MONDAY, time, reminder));
+                o = new Occurrence(DAYSOFTHEWEEK.MONDAY, time, reminder,notificationFrequency);
+                reminder.addOccurrence(o);
             }
 
             checkBox = (CheckBox) row.findViewById(R.id.check_tu);
             if(checkBox.isChecked()) {
-                reminder.addOccurrence(new Occurrence(DAYSOFTHEWEEK.TUESDAY, time, reminder));
+                o = new Occurrence(DAYSOFTHEWEEK.TUESDAY, time, reminder,notificationFrequency);
+                reminder.addOccurrence(o);
             }
 
             checkBox = (CheckBox) row.findViewById(R.id.check_we);
             if(checkBox.isChecked()) {
-                reminder.addOccurrence(new Occurrence(DAYSOFTHEWEEK.WEDNESDAY, time, reminder));
+                o = new Occurrence(DAYSOFTHEWEEK.WEDNESDAY, time, reminder,0);
+                reminder.addOccurrence(o);
             }
 
             checkBox = (CheckBox) row.findViewById(R.id.check_th);
             if(checkBox.isChecked()) {
-                reminder.addOccurrence(new Occurrence(DAYSOFTHEWEEK.THURSDAY, time, reminder));
+                o = new Occurrence(DAYSOFTHEWEEK.THURSDAY, time, reminder,notificationFrequency);
+                reminder.addOccurrence(o);
             }
 
             checkBox = (CheckBox) row.findViewById(R.id.check_fr);
             if(checkBox.isChecked()) {
-                reminder.addOccurrence(new Occurrence(DAYSOFTHEWEEK.FRIDAY, time, reminder));
+                o = new Occurrence(DAYSOFTHEWEEK.FRIDAY, time, reminder,0);
+                reminder.addOccurrence(o);
             }
 
             checkBox = (CheckBox) row.findViewById(R.id.check_sa);
             if(checkBox.isChecked()) {
-                reminder.addOccurrence(new Occurrence(DAYSOFTHEWEEK.SATURDAY, time, reminder));
+                o = new Occurrence(DAYSOFTHEWEEK.SATURDAY, time, reminder,0);
+                reminder.addOccurrence(o);
             }
 
             checkBox = (CheckBox) row.findViewById(R.id.check_su);
             if(checkBox.isChecked()) {
-                reminder.addOccurrence(new Occurrence(DAYSOFTHEWEEK.SUNDAY, time, reminder));
+                o = new Occurrence(DAYSOFTHEWEEK.SUNDAY, time, reminder,0);
+                reminder.addOccurrence(o);
             }
 
         }

@@ -55,7 +55,7 @@ public class Survey extends AppCompatActivity {
 
         if (id==R.id.action_finish) {
             if(isSurveyIsCompleted()) {
-                PersistencyManager.logSurveyCompletetion(LocalTime.now());
+                PersistencyManager.logSurveyCompletetion();
                 finish();
             } else {
                 new AlertDialog.Builder(this)
