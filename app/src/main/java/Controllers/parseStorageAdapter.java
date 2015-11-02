@@ -56,7 +56,7 @@ public class ParseStorageAdapter {
                             String colName = d.name().substring(0, 1) + d.name().toLowerCase().substring(1, 3);
 //                            Log.d("Nok",colName+" "+reminder.getInt(colName));
                             if (reminder.getInt(colName) >= 1) {
-                                tmpReminder.addOccurrence(new Occurrence(d, new LocalTime(hour, min), tmpReminder));
+//                                tmpReminder.addOccurrence(new Occurrence(d, new LocalTime(hour, min), tmpReminder));
 //                                Log.d("Nok", Integer.toString(tmpReminder.getOccurrences().size()));
                             }
                         }
@@ -278,7 +278,7 @@ public class ParseStorageAdapter {
                             String colName = d.name().substring(0, 1) + d.name().toLowerCase().substring(1, 3);
 //                            Log.d("Nok",colName+" "+reminder.getInt(colName));
                             if (search.getInt(colName) >= 1) {
-                                tmpSearch.addOccurrence(new Occurrence(d, new LocalTime(hour, min), tmpSearch));
+//                                tmpSearch.addOccurrence(new Occurrence(d, new LocalTime(hour, min), tmpSearch));
 //                                Log.d("Nok", Integer.toString(tmpReminder.getOccurrences().size()));
                             }
                         }
