@@ -31,13 +31,10 @@ public abstract class PersistencyManager {
     public static void saveReminders(Reminders reminders) {
         //save reminders including all associated objects (Tasks, Occurrences)
         LocalStorageAdapter db = new LocalStorageAdapter();
-        Log.d("Nok", "From PersistencyManager.java >> save reminders: " + " size: " + reminders.getReminders().size());
             db.deleteAllData();
-        Log.d("Nok", " size: " + reminders.getReminders().size());
         for (int i=0;i< reminders.getReminders().size();i++) {
-            Log.d("Nok", "save reminder >> i: "+i);
             Reminder reminder = reminders.getReminders().get(i);
-            Log.d("Nok", "save reminder: "+reminder.getName()+" "+reminder.getOccurrences().size());
+//            Log.d("Nok", "save reminder: "+reminder.getName()+" "+reminder.getOccurrences().size());
             db.createReminder(reminder);
         }
         db.closeDB();
@@ -127,21 +124,29 @@ public abstract class PersistencyManager {
     public static void logSurveyCompletetion() {
         // log completion of survey
         // to get userID call MyApp.getUserID();
-        ParseStorageAdapter db_cloud = new ParseStorageAdapter();
+        Log.d("Nok", "Log Survey Completetion");
+        ParseStorageAdapter db_cloud = MyApp.getDBcloud();
+//        ParseStorageAdapter db_cloud = new ParseStorageAdapter();
         db_cloud.createLogTaskComplete(MyApp.getUserID(), new Task("Do survey"));
     }
 
     public static void logAlert(Task task) {
         // log alart raised
         // to get userID call MyApp.getUserID();
-        ParseStorageAdapter db_cloud = new ParseStorageAdapter();
+        Log.d("Nok", "Log Alert");
+        ParseStorageAdapter db_cloud = MyApp.getDBcloud();
+//        ParseStorageAdapter db_cloud = new ParseStorageAdapter();
         db_cloud.createLogAlert(MyApp.getUserID(), task);
     }
 
     public static void logTaskCompletetion(Task task) {
         // log task completion
         // to get userID call MyApp.getUserID();
-        ParseStorageAdapter db_cloud = new ParseStorageAdapter();
+        Log.d("Nok", "Log Task Completetion");
+        ParseStorageAdapter db_cloud = MyApp.getDBcloud();
+//        ParseStorageAdapter db_cloud = new ParseStorageAdapter();
+//        db_cloud.testAddNewTaskToDB();
+        Log.d("Nok", "user_ID: "+MyApp.getUserID());
         db_cloud.createLogTaskComplete(MyApp.getUserID(), task);
     }
 }

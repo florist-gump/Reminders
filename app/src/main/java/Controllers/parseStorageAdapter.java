@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.parse.*;
 
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
@@ -34,15 +35,16 @@ public class ParseStorageAdapter {
     public void testAddNewTaskToDB(){
         //test
         ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("Blabla", "baga");
-        testObject.saveInBackground();
+        testObject.put("Blabla", "bagannnnnnnnn");
+        testObject.saveEventually();
+//        testObject.saveInBackground();
     }
 
     public void createLogAlert (int user_id, Task task){
         ParseObject logAlert = new ParseObject("LogAlert");
         logAlert.put("USER_ID", user_id);
         logAlert.put("TASK_NAME", task.getName());
-        logAlert.put("TIMESTAMP", LocalTime.now());
+        logAlert.put("TIMESTAMP", LocalDateTime.now().toString());
 //        logAlert.saveInBackground();
         logAlert.saveEventually(new SaveCallback() {
             public void done(ParseException e) {
@@ -61,7 +63,7 @@ public class ParseStorageAdapter {
         ParseObject logTaskComplete = new ParseObject("LogCompleteTask");
         logTaskComplete.put("USER_ID", user_id);
         logTaskComplete.put("TASK_NAME", task.getName());
-        logTaskComplete.put("TIMESTAMP", LocalTime.now());
+        logTaskComplete.put("TIMESTAMP", LocalDateTime.now().toString());
 //        logTaskComplete.saveInBackground();
         logTaskComplete.saveEventually(new SaveCallback() {
             public void done(ParseException e) {

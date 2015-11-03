@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import Controllers.ParseStorageAdapter;
 import Model.*;
 import Model.Reminders;
 
@@ -15,6 +16,8 @@ public class MyApp extends Application {
     private static Application instance;
     private static Model.Reminders reminders;
     private static SharedPreferences prefs = null;
+    private static Context context;
+    private static ParseStorageAdapter db_cloud;
 
     @Override
     public void onCreate() {
@@ -22,6 +25,7 @@ public class MyApp extends Application {
         prefs = getSharedPreferences("teamproject.glasgow.reminders_app", MODE_PRIVATE);
         instance = this;
         MyApp.context = getApplicationContext();
+        db_cloud = new ParseStorageAdapter();
     }
 
     public static Context getContext() {
@@ -40,9 +44,12 @@ public class MyApp extends Application {
         return prefs.getInt("user_id", -1);
     }
 
-    private static Context context;
-
     public static Context getAppContext() {
         return MyApp.context;
     }
+
+    public static ParseStorageAdapter getDBcloud() {
+        return db_cloud;
+    }
+
 }

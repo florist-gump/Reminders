@@ -72,7 +72,7 @@ public class Reminders extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //cloudMem = new ParseStorageAdapter(this);
+//        cloudMem = new ParseStorageAdapter(this);
 //        cloudMem.testAddNewTaskToDB();
 //        cloudMem.getRemindersFromDB();
 
@@ -165,7 +165,7 @@ public class Reminders extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("Nok", "onPause: " + reminders.getReminders().size());
+//        Log.d("Nok", "onPause: " + reminders.getReminders().size());
         PersistencyManager.saveReminders(reminders);
     }
 //    @Override

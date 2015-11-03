@@ -96,7 +96,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         int tr = db.delete(TABLE_TASKS, null, null);
         int or = db.delete(TABLE_OCCURRENCES, null, null);
-        Log.d("Nok","delete all data >> num of task row: "+ tr+" num of occurrence row: "+or);
+//        Log.d("Nok","delete all data >> num of task row: "+ tr+" num of occurrence row: "+or);
     }
 
     // ------------------------ "tasks" table methods ----------------//
@@ -111,7 +111,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         ArrayList<Occurrence> occurrences = reminder.getOccurrences();
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Log.d("Nok", "createReminder: " + reminder.getName());
+//        Log.d("Nok", "createReminder: " + reminder.getName());
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, reminder.getName());
@@ -141,13 +141,13 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_TASKS + " WHERE "
                 + KEY_NAME + " = '" + task_name+"'";
 
-        Log.e(LOG, selectQuery);
+//        Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
         if (c != null)
             c.moveToFirst();
-        Log.d("Nok", c.getString(c.getColumnIndex(KEY_NAME)) + " " + c.getString(c.getColumnIndex(KEY_ID)));
+//        Log.d("Nok", c.getString(c.getColumnIndex(KEY_NAME)) + " " + c.getString(c.getColumnIndex(KEY_ID)));
 //        Task t = new Task(c.getString(c.getColumnIndex(KEY_NAME)));
 //        t.setLastCompletionLog(LocalTime.parse(c.getString(c.getColumnIndex(KEY_LAST_COMPLETE_LOG))));
 
@@ -163,7 +163,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         Reminders reminders = new Reminders();
         String selectQuery = "SELECT  * FROM " + TABLE_TASKS;
 
-        Log.e(LOG, selectQuery);
+//        Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -174,14 +174,14 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
                 Reminder reminder = new Reminder(c.getString(c.getColumnIndex(KEY_NAME)));
                 Task t = new Task(c.getString(c.getColumnIndex(KEY_NAME)));
 //                t.setLastCompletionLog(LocalTime.parse(c.getString(c.getColumnIndex(KEY_LAST_COMPLETE_LOG))));
-                Log.d("Nok", "Task: " + t.getName());
+//                Log.d("Nok", "Task: " + t.getName());
                 ArrayList <Occurrence> occurrences = getAllOccurrences(t, reminder);
                 for(Occurrence o: occurrences){
                     reminder.addOccurrence(o);
                 }
 //                reminder.setOccurrences(occurrences);
                 reminder.setTask(t);
-                Log.d("Nok", "occ_size: "+occurrences.size());
+//                Log.d("Nok", "occ_size: "+occurrences.size());
                 reminders.addReminder(reminder);
             } while (c.moveToNext());
         }
@@ -312,7 +312,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         values.put(KEY_CREATED_AT, getDateTime());
         values.put(KEY_UPDATED_AT, getDateTime());
 
-        Log.d("Nok","create occurrence >> task id: " +task_id+" day: "+occurrence.getDay()+ " time: "+ occurrence.getTime());
+//        Log.d("Nok","create occurrence >> task id: " +task_id+" day: "+occurrence.getDay()+ " time: "+ occurrence.getTime());
 
         // insert row
         long occurrence_id = db.insert(TABLE_OCCURRENCES, null, values);
@@ -329,7 +329,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_OCCURRENCES + " WHERE "
                 + KEY_TASK_ID + " = " + getTaskID(t.getName());
 
-        Log.e(LOG, selectQuery);
+//        Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
@@ -355,14 +355,14 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
                 }else{
                     d = SUNDAY;
                 }
-                Log.d("Nok", c.getString(c.getColumnIndex(KEY_ID))+" "+c.getString(c.getColumnIndex(KEY_TASK_ID))
-                        +" "+c.getString(c.getColumnIndex(KEY_DAY))+" "+c.getString(c.getColumnIndex(KEY_TIME))
-                        +" "+c.getString(c.getColumnIndex(KEY_NOTIFICATION_FREQUENCY))
-                        +" "+c.getString(c.getColumnIndex(KEY_STATUS))
-                        +" "+c.getString(c.getColumnIndex(KEY_CREATED_AT))
-                        +" "+c.getString(c.getColumnIndex(KEY_UPDATED_AT)));
-
-                Log.d("Nok", "day: "+d);
+//                Log.d("Nok", c.getString(c.getColumnIndex(KEY_ID))+" "+c.getString(c.getColumnIndex(KEY_TASK_ID))
+//                        +" "+c.getString(c.getColumnIndex(KEY_DAY))+" "+c.getString(c.getColumnIndex(KEY_TIME))
+//                        +" "+c.getString(c.getColumnIndex(KEY_NOTIFICATION_FREQUENCY))
+//                        +" "+c.getString(c.getColumnIndex(KEY_STATUS))
+//                        +" "+c.getString(c.getColumnIndex(KEY_CREATED_AT))
+//                        +" "+c.getString(c.getColumnIndex(KEY_UPDATED_AT)));
+//
+//                Log.d("Nok", "day: "+d);
 
                 Occurrence o = new Occurrence(d, LocalTime.parse(c.getString(c.getColumnIndex(KEY_TIME))), r, c.getInt(c.getColumnIndex(KEY_NOTIFICATION_FREQUENCY)));
 
