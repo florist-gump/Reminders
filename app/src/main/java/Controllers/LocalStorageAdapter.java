@@ -176,7 +176,10 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
 //                t.setLastCompletionLog(LocalTime.parse(c.getString(c.getColumnIndex(KEY_LAST_COMPLETE_LOG))));
                 Log.d("Nok", "Task: " + t.getName());
                 ArrayList <Occurrence> occurrences = getAllOccurrences(t);
-                reminder.setOccurrences(occurrences);
+                for(Occurrence o: occurrences){
+                    reminder.addOccurrence(o);
+                }
+//                reminder.setOccurrences(occurrences);
                 reminder.setTask(t);
                 Log.d("Nok", "occ_size: "+occurrences.size());
                 // adding to tasks
@@ -338,17 +341,17 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
             do {
                 Reminder r = new Reminder(t.getName());
 
-                if(KEY_DAY.equals("MONDAY")){
+                if(c.getString(c.getColumnIndex(KEY_DAY)).equals("MONDAY")){
                     d = MONDAY;
-                } else if(KEY_DAY.equals("TUESDAY")){
+                } else if(c.getString(c.getColumnIndex(KEY_DAY)).equals("TUESDAY")){
                     d = TUESDAY;
-                }else if(KEY_DAY.equals("WEDNESDAY")){
+                }else if(c.getString(c.getColumnIndex(KEY_DAY)).equals("WEDNESDAY")){
                     d = WEDNESDAY;
-                }else if(KEY_DAY.equals("THURSDAY")){
+                }else if(c.getString(c.getColumnIndex(KEY_DAY)).equals("THURSDAY")){
                     d = THURSDAY;
-                }else if(KEY_DAY.equals("FRIDAY")){
+                }else if(c.getString(c.getColumnIndex(KEY_DAY)).equals("FRIDAY")){
                     d = FRIDAY;
-                }else if(KEY_DAY.equals("SATURDAY")){
+                }else if(c.getString(c.getColumnIndex(KEY_DAY)).equals("SATURDAY")){
                     d = SATURDAY;
                 }else{
                     d = SUNDAY;
@@ -359,6 +362,8 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
                         +" "+c.getString(c.getColumnIndex(KEY_STATUS))
                         +" "+c.getString(c.getColumnIndex(KEY_CREATED_AT))
                         +" "+c.getString(c.getColumnIndex(KEY_UPDATED_AT)));
+
+                Log.d("Nok", "day: "+d);
 
                 Occurrence o = new Occurrence(d, LocalTime.parse(c.getString(c.getColumnIndex(KEY_TIME))), r, c.getInt(c.getColumnIndex(KEY_NOTIFICATION_FREQUENCY)));
 
