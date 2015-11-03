@@ -175,14 +175,13 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
                 Task t = new Task(c.getString(c.getColumnIndex(KEY_NAME)));
 //                t.setLastCompletionLog(LocalTime.parse(c.getString(c.getColumnIndex(KEY_LAST_COMPLETE_LOG))));
                 Log.d("Nok", "Task: " + t.getName());
-                ArrayList <Occurrence> occurrences = getAllOccurrences(t);
+                ArrayList <Occurrence> occurrences = getAllOccurrences(t, reminder);
                 for(Occurrence o: occurrences){
                     reminder.addOccurrence(o);
                 }
 //                reminder.setOccurrences(occurrences);
                 reminder.setTask(t);
                 Log.d("Nok", "occ_size: "+occurrences.size());
-                // adding to tasks
                 reminders.addReminder(reminder);
             } while (c.moveToNext());
         }
@@ -190,31 +189,31 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         return reminders;
     }
 
-    public Reminder getReminders(String task_name) {
-//        Task task = new Task();
-//        ArrayList <Occurrence> occurrences = new ArrayList<Occurrence>();
-        Reminder reminder = new Reminder(task_name);
-        String selectQuery = "SELECT  * FROM " + TABLE_TASKS + " WHERE "
-                + KEY_NAME + " = '" + task_name+"'";
-
-        Log.e(LOG, selectQuery);
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (c.moveToFirst()) {
-            Task t = new Task(c.getString(c.getColumnIndex(KEY_NAME)));
-//                t.setLastCompletionLog(LocalTime.parse(c.getString(c.getColumnIndex(KEY_LAST_COMPLETE_LOG))));
-            Log.d("Nok", "Task: " + t.getName());
-            ArrayList <Occurrence> occurrences = getAllOccurrences(t);
-            Log.d("Nok", "occ_size: "+occurrences.size());
-            reminder.setOccurrences(occurrences);
-            reminder.setTask(t);
-        }
-
-        return reminder;
-    }
+//    public Reminder getReminders(String task_name) {
+////        Task task = new Task();
+////        ArrayList <Occurrence> occurrences = new ArrayList<Occurrence>();
+//        Reminder reminder = new Reminder(task_name);
+//        String selectQuery = "SELECT  * FROM " + TABLE_TASKS + " WHERE "
+//                + KEY_NAME + " = '" + task_name+"'";
+//
+//        Log.e(LOG, selectQuery);
+//
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor c = db.rawQuery(selectQuery, null);
+//
+//        // looping through all rows and adding to list
+//        if (c.moveToFirst()) {
+//            Task t = new Task(c.getString(c.getColumnIndex(KEY_NAME)));
+////                t.setLastCompletionLog(LocalTime.parse(c.getString(c.getColumnIndex(KEY_LAST_COMPLETE_LOG))));
+//            Log.d("Nok", "Task: " + t.getName());
+//            ArrayList <Occurrence> occurrences = getAllOccurrences(t);
+//            Log.d("Nok", "occ_size: "+occurrences.size());
+//            reminder.setOccurrences(occurrences);
+//            reminder.setTask(t);
+//        }
+//
+//        return reminder;
+//    }
 
 //    /**
 //     * getting all todos under single tag
@@ -325,7 +324,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
      * getting all occurrenes
      *
      * @param t*/
-    public ArrayList<Occurrence> getAllOccurrences(Task t) {
+    public ArrayList<Occurrence> getAllOccurrences(Task t, Reminder r) {
         ArrayList<Occurrence> occurrences = new ArrayList<Occurrence>();
         String selectQuery = "SELECT  * FROM " + TABLE_OCCURRENCES + " WHERE "
                 + KEY_TASK_ID + " = " + getTaskID(t.getName());
@@ -339,7 +338,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             DAYSOFTHEWEEK d;
             do {
-                Reminder r = new Reminder(t.getName());
+//                Reminder r = new Reminder(t.getName());
 
                 if(c.getString(c.getColumnIndex(KEY_DAY)).equals("MONDAY")){
                     d = MONDAY;
