@@ -21,6 +21,7 @@ public class MyApp extends Application {
         super.onCreate();
         prefs = getSharedPreferences("teamproject.glasgow.reminders_app", MODE_PRIVATE);
         instance = this;
+        MyApp.context = getApplicationContext();
     }
 
     public static Context getContext() {
@@ -37,5 +38,11 @@ public class MyApp extends Application {
 
     public static int getUserID() {
         return prefs.getInt("user_id", -1);
+    }
+
+    private static Context context;
+
+    public static Context getAppContext() {
+        return MyApp.context;
     }
 }

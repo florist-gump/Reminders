@@ -16,18 +16,19 @@ import Model.Occurrence;
 import Model.Reminder;
 import Model.Reminders;
 import Model.Task;
+import teamproject.glasgow.reminders_app.MyApp;
 import teamproject.glasgow.reminders_app.Tasks;
 
 /**
  * Created by ttnok on 20/10/2558.
  */
-public class ParseStorageAdapter extends AppCompatActivity {
+public class ParseStorageAdapter {
 //    private ParseObject reminderDetail = new ParseObject("ReminderList");
 
     public ParseStorageAdapter(){
         // Enable Local Datastore.
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, "ZhmW1AYvR4bRxEl0iqJwxsq4T7mzzByAaEKC6q1c", "w6luIBu0V5B7zT5ShqOsXMmeOoSEMX2ZYexD7WPj");
+        Parse.enableLocalDatastore(MyApp.getAppContext());
+        Parse.initialize(MyApp.getAppContext(), "ZhmW1AYvR4bRxEl0iqJwxsq4T7mzzByAaEKC6q1c", "w6luIBu0V5B7zT5ShqOsXMmeOoSEMX2ZYexD7WPj");
 
     }
     public void testAddNewTaskToDB(){
@@ -57,12 +58,12 @@ public class ParseStorageAdapter extends AppCompatActivity {
     }
 
     public void createLogTaskComplete (int user_id, Task task){
-        ParseObject logAlert = new ParseObject("LogCompleteTask");
-        logAlert.put("USER_ID", user_id);
-        logAlert.put("TASK_NAME", task.getName());
-        logAlert.put("TIMESTAMP", LocalTime.now());
-//        logAlert.saveInBackground();
-        logAlert.saveEventually(new SaveCallback() {
+        ParseObject logTaskComplete = new ParseObject("LogCompleteTask");
+        logTaskComplete.put("USER_ID", user_id);
+        logTaskComplete.put("TASK_NAME", task.getName());
+        logTaskComplete.put("TIMESTAMP", LocalTime.now());
+//        logTaskComplete.saveInBackground();
+        logTaskComplete.saveEventually(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {
                     // Saved successfully.

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -67,6 +68,7 @@ public class ModifyReminder extends AppCompatActivity {
                 isAddMode = false;
                 reminder = (Reminder) res.getSerializable("reminder");
                 reminderIndex = res.getInt("index");
+//                Log.d("Nok", "check: ModifyReminder.java: "+reminder.getName()+" "+reminder.getOccurrences().size());
                 notificationFrequency = reminder.getOccurrences().get(0).getNotificationFrequency();
                 addPrefilledRows(reminder);
                 break;

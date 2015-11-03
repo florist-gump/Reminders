@@ -18,26 +18,62 @@ import teamproject.glasgow.reminders_app.MyApp;
  */
 public abstract class PersistencyManager {
 
-    private static LocalStorageAdapter db;
-
     public static Reminders getReminders() {
-        Reminders r = HelperFunctions.generateReminderInitData();
-        for (Reminder reminder : r.getReminders()) {
-           Log.d("Nok", Long.toString(db.createReminder(reminder)));
-        }
-//        r = db.getAllReminders();
+        LocalStorageAdapter db = new LocalStorageAdapter();
+        Reminders r = db.getAllReminders();
         db.closeDB();
 
-        return HelperFunctions.generateReminderDummmyData();
-//        return r;
+//        return HelperFunctions.generateReminderDummmyData();
+        return r;
         //replace with data from DB
     }
+
     public static void saveReminders(Reminders reminders) {
         //save reminders including all associated objects (Tasks, Occurrences)
-        for (Reminder reminder : reminders.getReminders()) {
+        LocalStorageAdapter db = new LocalStorageAdapter();
+        Log.d("Nok", "From PersistencyManager.java >> save reminders: " + " size: " + reminders.getReminders().size());
+            db.deleteAllData();
+        Log.d("Nok", " size: " + reminders.getReminders().size());
+        for (int i=0;i< reminders.getReminders().size();i++) {
+            Log.d("Nok", "save reminder >> i: "+i);
+            Reminder reminder = reminders.getReminders().get(i);
+            Log.d("Nok", "save reminder: "+reminder.getName()+" "+reminder.getOccurrences().size());
             db.createReminder(reminder);
         }
+        db.closeDB();
     }
+
+//    public static Reminder getReminder(String task_name) {
+//        Reminder r = db.getReminders(task_name);
+//        db.closeDB();
+//
+//        return r;
+//        //replace with data from DB
+//    }
+//
+//    public static void updateReminder(Reminder reminder) {
+//        db.updateReminder(reminder);
+//        db.closeDB();
+//
+//        return;
+//        //replace with data from DB
+//    }
+//
+//    public static void deleteReminder(Reminder reminder) {
+//        db.deleteReminder(reminder);
+//        db.closeDB();
+//
+//        return;
+//        //replace with data from DB
+//    }
+
+
+
+//    public static void saveReminder(Reminder reminder) {
+//        //save reminders including all associated objects (Tasks, Occurrences)
+//        Log.d("Nok", "From PersistencyManager.java save reminder: " + reminder.getName());
+//        db.createReminder(reminder);
+//    }
 
     public static ArrayList<SurveyQuestion> getSurveyQuestions() {
         return createSurveyQuestions();

@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -87,6 +88,7 @@ public class Reminders extends AppCompatActivity {
 
         if (prefs.getBoolean("firstrun", true)) {
             reminders = HelperFunctions.generateReminderInitData();
+            PersistencyManager.saveReminders(reminders);
         }
         else {
             reminders = PersistencyManager.getReminders();
@@ -154,11 +156,24 @@ public class Reminders extends AppCompatActivity {
         UserID = MyApp.getUserID();
     }
 
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        Log.d("Nok", "onStop: "+reminders.getReminders().size());
+////        PersistencyManager.saveReminders(reminders);
+//    }
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
+    public void onPause() {
+        super.onPause();
+        Log.d("Nok", "onPause: " + reminders.getReminders().size());
         PersistencyManager.saveReminders(reminders);
     }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        Log.d("Nok", "onDestroy: " + reminders.getReminders().size());
+////        PersistencyManager.saveReminders(reminders);
+//    }
 
     @Override
     protected void onResume() {
@@ -221,6 +236,7 @@ public class Reminders extends AppCompatActivity {
                     Bundle res = data.getExtras();
                     Reminder reminder =  (Reminder)res.getSerializable("reminder");
                     reminders.addReminder(reminder);
+//                    PersistencyManager.saveReminder(reminder);
                     //cloudMem.addReminderToDB(reminder);
                 }
                 break;
@@ -230,12 +246,16 @@ public class Reminders extends AppCompatActivity {
                     if (res.getBoolean("delete")) {
                         Integer index =  res.getInt("index");
 //                        Log.d("Nok", "delete " + res.toString());
+//                        PersistencyManager.deleteReminder(reminders.getReminders().get(index));
                         //cloudMem.deleteReminderFromDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString());
                         reminders.removeReminder(index);
                         break;
                     }
                     Reminder reminder =  (Reminder)res.getSerializable("reminder");
                     Integer index =  res.getInt("index");
+//                    Log.d("Nok","Reminders.java >> modify reminders: "+reminders.getReminders().get(index).getName()+" occ: "+ reminders.getReminders().get(index).getOccurrences().size() +"task: " + reminders.getReminders().get(index).getTask().getName());
+//                    Log.d("Nok","modify reminders get index: "+reminders.getReminders().get(index));
+//                    PersistencyManager.updateReminder(reminders.getReminders().get(index));
                     //cloudMem.updateReminderOnDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString(), reminder);
                     reminders.modifyReminder(reminder, index);
                 }
