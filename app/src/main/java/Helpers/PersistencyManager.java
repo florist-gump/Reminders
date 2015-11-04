@@ -22,8 +22,6 @@ public abstract class PersistencyManager {
         LocalStorageAdapter db = new LocalStorageAdapter();
         Reminders r = db.getAllReminders();
         db.closeDB();
-
-//        return HelperFunctions.generateReminderDummmyData();
         return r;
         //replace with data from DB
     }
@@ -34,7 +32,7 @@ public abstract class PersistencyManager {
             db.deleteAllData();
         for (int i=0;i< reminders.getReminders().size();i++) {
             Reminder reminder = reminders.getReminders().get(i);
-//            Log.d("Nok", "save reminder: "+reminder.getName()+" "+reminder.getOccurrences().size());
+//            Log.d("Nok", "save reminder: "+reminder.getName()+" "+reminder.getTask().getName()+" "+reminder.getTask().getLastCompletionLog());
             db.createReminder(reminder);
         }
         db.closeDB();
@@ -126,7 +124,6 @@ public abstract class PersistencyManager {
         // to get userID call MyApp.getUserID();
         Log.d("Nok", "Log Survey Completetion");
         ParseStorageAdapter db_cloud = MyApp.getDBcloud();
-//        ParseStorageAdapter db_cloud = new ParseStorageAdapter();
         db_cloud.createLogTaskComplete(MyApp.getUserID(), new Task("Do survey"));
     }
 
@@ -135,7 +132,6 @@ public abstract class PersistencyManager {
         // to get userID call MyApp.getUserID();
         Log.d("Nok", "Log Alert");
         ParseStorageAdapter db_cloud = MyApp.getDBcloud();
-//        ParseStorageAdapter db_cloud = new ParseStorageAdapter();
         db_cloud.createLogAlert(MyApp.getUserID(), task);
     }
 
