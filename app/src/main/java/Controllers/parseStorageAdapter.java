@@ -29,7 +29,7 @@ public class ParseStorageAdapter {
     public ParseStorageAdapter(){
         // Enable Local Datastore.
         Parse.enableLocalDatastore(MyApp.getAppContext());
-        Parse.initialize(MyApp.getAppContext(), "ZhmW1AYvR4bRxEl0iqJwxsq4T7mzzByAaEKC6q1c", "w6luIBu0V5B7zT5ShqOsXMmeOoSEMX2ZYexD7WPj");
+        Parse.initialize(MyApp.getAppContext(), "cUMU855gEthkMhDtCaRzcPNoY88qs0Q4Cegve4LM", "zgxQ24kOnuFONN6zTTe0b3T7fuKXtkjxIU784lKh");
 
     }
     public void testAddNewTaskToDB(){
