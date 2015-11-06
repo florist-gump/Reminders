@@ -145,7 +145,12 @@ public class ModifyReminder extends AppCompatActivity {
         if (id==R.id.action_finish) {
             Intent resultIntent = new Intent();
 
+            //TODO: Test this.
             Reminder reminder = getReminder();
+            if(reminder.getTask() !=null) {
+                reminder = ExperimentSetup.setNotificationFrequency(reminder);
+            }
+
 
             if(!isDataValid(reminder)) {
                 new AlertDialog.Builder(this)
