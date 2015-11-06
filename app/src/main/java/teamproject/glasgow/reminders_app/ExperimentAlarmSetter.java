@@ -1,15 +1,11 @@
 package teamproject.glasgow.reminders_app;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import Helpers.RandomNumberGen;
 
@@ -24,18 +20,33 @@ public class ExperimentAlarmSetter {
     private static Context context = MyApp.getContext();
     private static int randAlarmID = RandomNumberGen.getInstance().randomInt();
 
-    public static void waittill23rd(){
-        //calendar.set(2015,11,23);
-        calendar.set(2015, Calendar.JANUARY, 5, 20, 42, 0);
-        Intent intent = new Intent(context, ExperimentAlarmReceiver.class);
+
+
+
+    public static void waitUntil19th(){
+        calendar.set(2015, Calendar.NOVEMBER, 19, 12, 0);
+        Intent intent = new Intent(context, Treatment2Receiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, randAlarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
     }
 
-    public void waittill30th(){
-        calendar.set(2015,11,30);
-
+    public static void waitUntil23rd(){
+        calendar.set(2015, Calendar.NOVEMBER, 23, 12, 0);
+        Intent intent = new Intent(context, Treatment3Receiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, randAlarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
+
+    public static void waitUntil27th(){
+        calendar.set(2015, Calendar.NOVEMBER, 27, 12, 0);
+        Intent intent = new Intent(context, Treatment2Receiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, randAlarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+
+    
 }

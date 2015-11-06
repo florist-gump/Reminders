@@ -5,10 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -20,17 +18,19 @@ import Model.Reminder;
 public class ExperimentSetup extends AppCompatActivity {
 
 
-    final int participantID = MyApp.getUserID();
-    List<Reminder> allReminders = MyApp.getReminders().getReminders();
-    final List<Model.Task> allTasks = PersistencyManager.getTasks();
-    //TODO: designate task A and B here.
-    final static String taskA = "Take Multivitamin";
-    final static String taskB = "Take a Nap";
-    Model.Reminder taskAReminder = null;
-    Model.Reminder taskBReminder = null;
-    static List<Model.Reminder> otherTaskReminders = new ArrayList<Model.Reminder>();
-    static int frequencyOfA = 0, frequencyOfB = 0, frequencyOfC = 0, frequencyOfD = 0,
+    private final int participantID = MyApp.getUserID();
+    private List<Reminder> allReminders = MyApp.getReminders().getReminders();
+    private final List<Model.Task> allTasks = PersistencyManager.getTasks();
+    private final static String taskA = "Take Multivitamin";
+    private final static String taskB = "Take a Nap";
+    private static Model.Reminder taskAReminder = null;
+    private static Model.Reminder taskBReminder = null;
+    private static List<Model.Reminder> otherTaskReminders = new ArrayList<Model.Reminder>();
+    private static int frequencyOfA = 0, frequencyOfB = 0, frequencyOfC = 0, frequencyOfD = 0,
             frequencyOfE = 0, frequencyOfF = 0;
+    private static List<Occurrence> occurrencesOfA, occurrencesOfB, occurrencesOfC, occurrencesOfD,
+            occurrencesOfE, occurrencesOfF;
+
 
 
     @Override
@@ -218,13 +218,34 @@ public class ExperimentSetup extends AppCompatActivity {
             }
         }
 
+
+        treatment1();
+
+        //TODO: Wait a week
+        ExperimentAlarmSetter.waitUntil19th();
+
+        //TODO: Wait another week
+        ExperimentAlarmSetter.waitUntil23rd();
+
+        //TODO: Wait another week and then send notification saying study is concluded, thanks for participating, and please delete app from phone.
+        ExperimentAlarmSetter.waitUntil27th();
+
+
+        // setup the design here
+        // you can get the reminders via MyApp.getReminders() and userID via MyApp.getUserID()
+        // if you want to wake up the system at certain times to change occ look into the AlarmSetter and AlarmReceiver classes
+        // a reboot cancels your alarms so you'd also have to do something similar to what I did in BootReceiver to restore your previously set Alarms
+        finish();
+    }
+
+    public static void treatment1(){
         //Assign treatment 1 frequencies
-        List<Occurrence> occurrencesOfA = taskAReminder.getOccurrences();
-        List<Occurrence> occurrencesOfB = taskBReminder.getOccurrences();
-        List<Occurrence> occurrencesOfC = otherTaskReminders.get(0).getOccurrences();
-        List<Occurrence> occurrencesOfD = otherTaskReminders.get(1).getOccurrences();
-        List<Occurrence> occurrencesOfE = otherTaskReminders.get(2).getOccurrences();
-        List<Occurrence> occurrencesOfF = otherTaskReminders.get(3).getOccurrences();
+        occurrencesOfA = taskAReminder.getOccurrences();
+        occurrencesOfB = taskBReminder.getOccurrences();
+        occurrencesOfC = otherTaskReminders.get(0).getOccurrences();
+        occurrencesOfD = otherTaskReminders.get(1).getOccurrences();
+        occurrencesOfE = otherTaskReminders.get(2).getOccurrences();
+        occurrencesOfF = otherTaskReminders.get(3).getOccurrences();
 
         for(Occurrence occurrence: occurrencesOfA){
             occurrence.setNotificationFrequency(frequencyOfA);
@@ -249,13 +270,9 @@ public class ExperimentSetup extends AppCompatActivity {
         for(Occurrence occurrence: occurrencesOfF){
             occurrence.setNotificationFrequency(frequencyOfF);
         }
+    }
 
-
-        //TODO: Wait a week
-
-        ExperimentAlarmSetter.waittill23rd();
-
-
+    public static void treatment2(){
         NotificationManager.createNotification(null, "A Message From the Reminders App", "Due to certain circumstances of the experiment," +
                 "we will be turning off notifications associated with "+taskA+". In the mean time, please try and remember to do " +
                 "it on your own. Sorry for the inconvenience.");
@@ -265,15 +282,9 @@ public class ExperimentSetup extends AppCompatActivity {
         for(Occurrence occurrence: occurrencesOfA){
             occurrence.setIsActive(false);
         }
+    }
 
-
-
-
-        //TODO: Wait another week
-
-
-
-
+    public static void treatmenr3(){
         NotificationManager.createNotification(null, "A Message From the Reminders App", "We have turned the notifications for " +
                 "back on. Thanks for your patience.");
         occurrencesOfA = taskAReminder.getOccurrences();
@@ -308,17 +319,15 @@ public class ExperimentSetup extends AppCompatActivity {
             int aRandomNum = randomNums.get(i);
             occurrencesOfB.get(aRandomNum).setIsActive(false);
         }
+    }
 
-
-
-
-
-
-        // setup the design here
-        // you can get the reminders via MyApp.getReminders() and userID via MyApp.getUserID()
-        // if you want to wake up the system at certain times to change occ look into the AlarmSetter and AlarmReceiver classes
-        // a reboot cancels your alarms so you'd also have to do something similar to what I did in BootReceiver to restore your previously set Alarms
-        finish();
+    public static void experimentConclusion(){
+        NotificationManager.createNotification(MyApp.getContext(), "The Experiment Is Finished!",
+                "Thank you for participating in our experiment. The experiment has now ended. Please" +
+                        " make sure to delete the Reminders application from your phone as it is not" +
+                        "designed to be used after this point. The last part of the study is a short" +
+                        "exit survey. If you have not already made arrangements to do this, then" +
+                        "please contact us as soon as possible. Thank you again for your participation!");
     }
 
     public static synchronized Reminder setNotificationFrequency(Reminder reminder){

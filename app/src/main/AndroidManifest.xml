@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <receiver android:name=".AlarmReceiver" />
-        <receiver android:name=".ExperimentAlarmReceiver" />
+        <receiver android:name=".ExperimentConclusionReceiver" />
         <receiver android:name=".BootReceiver"
             android:enabled="true">
             <intent-filter>
