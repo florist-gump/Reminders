@@ -88,7 +88,7 @@ public class Reminders extends AppCompatActivity {
 
         if (prefs.getBoolean("firstrun", true)) {
             reminders = HelperFunctions.generateReminderInitData();
-            PersistencyManager.saveReminders(reminders);
+            PersistencyManager.saveReminders(reminders, true);
         }
         else {
             reminders = PersistencyManager.getReminders();
@@ -166,7 +166,7 @@ public class Reminders extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 //        Log.d("Nok", "onPause: " + reminders.getReminders().size());
-        PersistencyManager.saveReminders(reminders);
+        PersistencyManager.saveReminders(reminders, false);
     }
 //    @Override
 //    public void onDestroy() {
@@ -245,18 +245,11 @@ public class Reminders extends AppCompatActivity {
                     Bundle res = data.getExtras();
                     if (res.getBoolean("delete")) {
                         Integer index =  res.getInt("index");
-//                        Log.d("Nok", "delete " + res.toString());
-//                        PersistencyManager.deleteReminder(reminders.getReminders().get(index));
-                        //cloudMem.deleteReminderFromDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString());
                         reminders.removeReminder(index);
                         break;
                     }
                     Reminder reminder =  (Reminder)res.getSerializable("reminder");
                     Integer index =  res.getInt("index");
-//                    Log.d("Nok","Reminders.java >> modify reminders: "+reminders.getReminders().get(index).getName()+" occ: "+ reminders.getReminders().get(index).getOccurrences().size() +"task: " + reminders.getReminders().get(index).getTask().getName());
-//                    Log.d("Nok","modify reminders get index: "+reminders.getReminders().get(index));
-//                    PersistencyManager.updateReminder(reminders.getReminders().get(index));
-                    //cloudMem.updateReminderOnDB(reminders.getReminders().get(index).getName(), reminders.getReminders().get(index).getOccurrences().get(0).getTime().toString(), reminder);
                     reminders.modifyReminder(reminder, index);
                 }
                 break;
