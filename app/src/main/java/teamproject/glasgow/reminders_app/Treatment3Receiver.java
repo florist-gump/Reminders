@@ -11,7 +11,7 @@ public class Treatment3Receiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         ExperimentSetup.treatmenr3();
-        System.out.println("*********In Treatment3Receiver *********\n****************");
+//        System.out.println("*********In Treatment3Receiver *********\n****************");
     }
 
 }

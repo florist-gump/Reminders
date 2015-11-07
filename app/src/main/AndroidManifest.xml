@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- permission required to use Alarm Manager -->
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
@@ -17,6 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".Treatment2Receiver" />
+        <receiver android:name=".Treatment3Receiver" />
         <receiver android:name=".ExperimentConclusionReceiver" />
         <receiver android:name=".BootReceiver"
             android:enabled="true">

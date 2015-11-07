@@ -21,10 +21,11 @@ public class ExperimentAlarmSetter {
     private static int randAlarmID = RandomNumberGen.getInstance().randomInt();
 
 
-
+    //TODO: test that these work
 
     public static void waitUntil19th(){
         calendar.set(2015, Calendar.NOVEMBER, 19, 12, 0);
+
         Intent intent = new Intent(context, Treatment2Receiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, randAlarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
@@ -33,6 +34,8 @@ public class ExperimentAlarmSetter {
 
     public static void waitUntil23rd(){
         calendar.set(2015, Calendar.NOVEMBER, 23, 12, 0);
+
+
         Intent intent = new Intent(context, Treatment3Receiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, randAlarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
@@ -41,7 +44,8 @@ public class ExperimentAlarmSetter {
 
     public static void waitUntil27th(){
         calendar.set(2015, Calendar.NOVEMBER, 27, 12, 0);
-        Intent intent = new Intent(context, Treatment2Receiver.class);
+
+        Intent intent = new Intent(context, ExperimentConclusionReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, randAlarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
