@@ -69,12 +69,12 @@ public abstract class AlarmSetter {
                 dateShift = 7;
             }
         }
-        calendar.add(Calendar.DATE, dateShift);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.HOUR_OF_DAY, o.getTime().getHourOfDay());
         calendar.set(Calendar.MINUTE, o.getTime().getMinuteOfHour());
         calendar.set(Calendar.SECOND, o.getTime().getSecondOfMinute());
         calendar.set(Calendar.MILLISECOND, o.getTime().getMillisOfSecond());
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        calendar.add(Calendar.DATE, dateShift);
         long l = calendar.getTimeInMillis();
         Intent intent1 = new Intent(context, AlarmReceiver.class);
         intent1.putExtra("Reminder", o.getReminder());
@@ -89,7 +89,15 @@ public abstract class AlarmSetter {
                 alarmId = RandomNumberGen.getInstance().randomInt();
                 pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
                 am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
-                am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - 20 * i * 60000 , AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+                if(Calendar.getInstance().getTimeInMillis() <= (calendar.getTimeInMillis() - 20 * i * 60000)) {
+                    am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - 20 * i * 60000 , AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+                } else {
+                    if(dateShift == 0) {
+                        dateShift = 7;
+                    }
+                    am.setRepeating(AlarmManager.RTC_WAKEUP, (calendar.getTimeInMillis() - 20 * i * 60000) + AlarmManager.INTERVAL_DAY * dateShift , AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+                }
+
                 o.getAlarmIds().add(alarmId);
             }
         }
