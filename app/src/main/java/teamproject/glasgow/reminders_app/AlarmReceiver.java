@@ -29,11 +29,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         Reminder reminder = (Reminder)intent.getSerializableExtra("Reminder");
         Occurrence occurrence = (Occurrence)intent.getSerializableExtra("Occurrence");
         if(reminder != null && occurrence != null) {
-            if(!occurrence.getIsActive()) {return;}
-            Helpers.NotificationManager.createNotification(context,"Reminder for you",reminder.getName());
             if(reminder.getTask() != null) {
                 PersistencyManager.logAlert(reminder.getTask());
             }
+            if(!occurrence.getIsActive()) {return;}
+            Helpers.NotificationManager.createNotification(context,"Reminder for you",reminder.getName());
         }
     }
 

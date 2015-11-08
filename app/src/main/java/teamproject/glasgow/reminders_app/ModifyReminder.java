@@ -29,6 +29,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import Helpers.DAYSOFTHEWEEK;
+import Helpers.HelperFunctions;
 import Helpers.PersistencyManager;
 import Model.Occurrence;
 import Model.Reminder;
@@ -145,12 +146,7 @@ public class ModifyReminder extends AppCompatActivity {
         if (id==R.id.action_finish) {
             Intent resultIntent = new Intent();
 
-            //TODO: Test this.
             Reminder reminder = getReminder();
-            if(reminder.getTask() !=null) {
-                reminder = ExperimentSetup.setNotificationFrequency(reminder);
-            }
-
 
             if(!isDataValid(reminder)) {
                 new AlertDialog.Builder(this)
@@ -167,6 +163,13 @@ public class ModifyReminder extends AppCompatActivity {
                 resultIntent.putExtra("reminder",reminder);
                 resultIntent.putExtra("index",reminderIndex);
                 setResult(Activity.RESULT_OK, resultIntent);
+                //TODO: Test this.
+                if(reminder.getTask() !=null) {
+                    reminder = ExperimentSetup.setNotificationFrequency(reminder);
+                }
+                if (MyApp.getUserID() > 18) {
+                    HelperFunctions.setAllOccurrencesToInactive(reminder);
+                }
                 finish();
             }
 

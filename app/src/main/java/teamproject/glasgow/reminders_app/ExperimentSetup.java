@@ -1,5 +1,7 @@
 package teamproject.glasgow.reminders_app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -183,8 +185,23 @@ public class ExperimentSetup extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("teamproject.glasgow.reminders_app", MODE_PRIVATE);
 
         EditText text = (EditText) findViewById(R.id.user_id);
-        //TODO: App crashes if this is not an int.
-        int userID = Integer.parseInt(text.getText().toString());
+        
+        int userID;
+        try {
+            userID = Integer.parseInt(text.getText().toString());
+        } catch (NumberFormatException e) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Entered User ID not valid")
+                    .setMessage("Please make sure you provide a valid User ID")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return;
+        }
         prefs.edit().putInt("user_id", userID).commit();
 
 
