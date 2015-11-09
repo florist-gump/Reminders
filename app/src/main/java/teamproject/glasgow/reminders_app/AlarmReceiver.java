@@ -29,7 +29,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         Reminder reminder = (Reminder)intent.getSerializableExtra("Reminder");
         Occurrence occurrence = (Occurrence)intent.getSerializableExtra("Occurrence");
 
-        System.out.println("*****Occurrence active?:"+occurrence.getIsActive()+"Name:"+occurrence.getReminder().getName());
+        //get updated version of occurrence
+        if(MyApp.getReminders().getOccurenceFromId(occurrence.getId() )!= null) {
+            occurrence = MyApp.getReminders().getOccurenceFromId(occurrence.getId());
+            reminder = occurrence.getReminder();
+        }
 
         if(reminder != null && occurrence != null) {
             if(reminder.getTask() != null) {

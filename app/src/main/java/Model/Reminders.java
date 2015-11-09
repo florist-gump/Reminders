@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -19,7 +20,7 @@ import Helpers.DAYSOFTHEWEEK;
 /**
  * Created by Flo on 13/10/15.
  */
-public class Reminders extends Observable {
+public class Reminders extends Observable implements Serializable {
     private ArrayList<Reminder> reminders;
 
 
@@ -86,6 +87,17 @@ public class Reminders extends Observable {
         days.addAll(hs);
         Collections.sort(days);
         return days;
+    }
+
+    public Occurrence getOccurenceFromId(int id) {
+        for (Reminder r : reminders) {
+            for (Occurrence o : r.getOccurrences()) {
+                if(id == o.getId()) {
+                    return o;
+                }
+            }
+        }
+        return null;
     }
 
 }

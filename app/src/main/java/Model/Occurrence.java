@@ -9,6 +9,7 @@ import java.util.List;
 
 import Helpers.AlarmSetter;
 import Helpers.DAYSOFTHEWEEK;
+import Helpers.RandomNumberGen;
 
 public class Occurrence implements Comparable<Occurrence>, Serializable {
     private DAYSOFTHEWEEK day;
@@ -17,6 +18,7 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
     private Boolean isActive;
     private List<Integer> alarmIds;
     private int notificationFrequency;
+    private int id;
 
     public Occurrence(DAYSOFTHEWEEK day, LocalTime time, Reminder reminder, int notificationFrequency ) {
         this.day = day;
@@ -25,6 +27,7 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
         isActive = true;
         alarmIds = new ArrayList<Integer>();
         this.notificationFrequency = notificationFrequency;
+        id = RandomNumberGen.getInstance().randomInt();
     }
 
     public DAYSOFTHEWEEK getDay() {
@@ -70,6 +73,14 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
 
     public int getNotificationFrequency() {
         return notificationFrequency;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setNotificationFrequency(int notificationFrequency) {
