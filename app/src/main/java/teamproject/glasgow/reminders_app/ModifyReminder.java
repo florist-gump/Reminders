@@ -163,18 +163,13 @@ public class ModifyReminder extends AppCompatActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             } else {
-
-                resultIntent.putExtra("reminder",reminder);
-                resultIntent.putExtra("index",reminderIndex);
-                setResult(Activity.RESULT_OK, resultIntent);
-
+                if (task != null) {
+                    reminder.setTask(task);
+                }
                 //TODO: Test this.
                 if(reminder.getTask() !=null) {
                     reminder = ExperimentSetup.setNotificationFrequency(reminder);
                 }
-
-
-
                 if (MyApp.getUserID() > 18) {
                     HelperFunctions.setAllOccurrencesToInactive(reminder);
                 }
