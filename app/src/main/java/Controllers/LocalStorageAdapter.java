@@ -124,6 +124,8 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         // insert Tasks
         if(reminder.getTask()!=null && firstTime){
             createTask((int)reminder_id, reminder.getTask());
+        }else if (reminder.getTask()!=null){
+            int i = updateTask(reminder.getTask(), (int)reminder_id);
         }
 
         ArrayList<Occurrence> occurrences = reminder.getOccurrences();
@@ -134,6 +136,22 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
 
         return reminder_id;
     }
+
+    public int updateTask(Task task, int reminder_id){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, task.getName());
+        values.put(KEY_REMINDER_ID, reminder_id);
+        if(task.getLastCompletionLog() != null) {
+            values.put(KEY_LAST_COMPLETE_LOG, String.valueOf(task.getLastCompletionLog()));
+        }else{
+            values.put(KEY_LAST_COMPLETE_LOG, "null");
+        }
+//        Log.d("Nok", "update task: "+values.valueSet());
+        return db.update(TABLE_TASKS, values, KEY_NAME + "=?", new String[] {String.valueOf(task.getName())});
+    }
+
     public long createTask(int reminder_id, Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
