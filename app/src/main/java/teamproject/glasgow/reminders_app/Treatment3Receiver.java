@@ -10,7 +10,7 @@ import android.content.Intent;
 public class Treatment3Receiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        ExperimentSetup.treatmenr3();
+        ExperimentSetup.treatment3();
 //        System.out.println("*********In Treatment3Receiver *********\n****************");
     }
 

@@ -79,7 +79,7 @@ public class ExperimentSetup extends AppCompatActivity {
         }
     }
 
-    public static void treatmenr3() {
+    public static void treatment3() {
         NotificationManager.createNotification(null, "A Message From the Reminders App", "We have turned the notifications for " +
                 "back on. Thanks for your patience.");
         occurrencesOfA = taskAReminder.getOccurrences();
@@ -363,7 +363,6 @@ public class ExperimentSetup extends AppCompatActivity {
 
 
         ExperimentAlarmSetter.waitUntil19th();
-
 
         ExperimentAlarmSetter.waitUntil23rd();
 
