@@ -18,7 +18,10 @@ public class BootReceiver extends BroadcastReceiver {
             for (Reminder reminder : PersistencyManager.getReminders().getReminders()) {
                 AlarmSetter.setRepeatingAlarmForReminder(reminder, null);
             }
-
+            //TODO: Test this
+            ExperimentAlarmSetter.waitUntil19th();
+            ExperimentAlarmSetter.waitUntil23rd();
+            ExperimentAlarmSetter.waitUntil27th();
         }
     }
 }

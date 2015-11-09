@@ -22,7 +22,9 @@ public class ExperimentAlarmSetter {
 
 
     //TODO: test that these work
+    //TODO: address reboot issue
 
+    //
     public static void waitUntil19th(){
         calendar.set(2015, Calendar.NOVEMBER, 19, 12, 0);
 
@@ -34,7 +36,6 @@ public class ExperimentAlarmSetter {
 
     public static void waitUntil23rd(){
         calendar.set(2015, Calendar.NOVEMBER, 23, 12, 0);
-
 
         Intent intent = new Intent(context, Treatment3Receiver.class);
         pendingIntent = PendingIntent.getBroadcast(context, randAlarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);

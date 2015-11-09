@@ -74,11 +74,12 @@ public class ExperimentSetup extends AppCompatActivity {
                 "we will be turning off notifications associated with " + taskA + ". In the mean time, please try and remember to do " +
                 "it on your own. Sorry for the inconvenience.");
 
-
         occurrencesOfA = taskAReminder.getOccurrences();
+
         for (Occurrence occurrence : occurrencesOfA) {
             occurrence.setIsActive(false);
         }
+
     }
 
     public static void treatment3() {

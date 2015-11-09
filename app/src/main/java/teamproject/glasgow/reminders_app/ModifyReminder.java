@@ -163,10 +163,17 @@ public class ModifyReminder extends AppCompatActivity {
                 resultIntent.putExtra("reminder",reminder);
                 resultIntent.putExtra("index",reminderIndex);
                 setResult(Activity.RESULT_OK, resultIntent);
+
+
+
+
                 //TODO: Test this.
                 if(reminder.getTask() !=null) {
                     reminder = ExperimentSetup.setNotificationFrequency(reminder);
                 }
+
+
+
                 if (MyApp.getUserID() > 18) {
                     HelperFunctions.setAllOccurrencesToInactive(reminder);
                 }

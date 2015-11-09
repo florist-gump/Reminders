@@ -28,6 +28,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Reminder reminder = (Reminder)intent.getSerializableExtra("Reminder");
         Occurrence occurrence = (Occurrence)intent.getSerializableExtra("Occurrence");
+
+        System.out.println("*****Occurrence active?:"+occurrence.getIsActive()+"Name:"+occurrence.getReminder().getName());
+
         if(reminder != null && occurrence != null) {
             if(reminder.getTask() != null) {
                 PersistencyManager.logAlert(reminder.getTask());
