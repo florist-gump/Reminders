@@ -134,9 +134,9 @@ public class ExperimentSetup extends AppCompatActivity {
         List<Occurrence> occurrences = reminder.getOccurrences();
 
         String taskC = otherTaskReminders.get(0).getName();
-        String taskD = otherTaskReminders.get(0).getName();
-        String taskE = otherTaskReminders.get(0).getName();
-        String taskF = otherTaskReminders.get(0).getName();
+        String taskD = otherTaskReminders.get(1).getName();
+        String taskE = otherTaskReminders.get(2).getName();
+        String taskF = otherTaskReminders.get(3).getName();
 
         if (taskName.equals(taskA)) {
             for (Occurrence occurrence : occurrences) {
@@ -208,6 +208,7 @@ public class ExperimentSetup extends AppCompatActivity {
 
         System.out.println("*******Printing here!*******");
 
+        //TODO: subtract 1 from below values
         switch (participantID) {
             case 1:
                 frequencyOfA = 1;
@@ -356,6 +357,15 @@ public class ExperimentSetup extends AppCompatActivity {
             default:
                 break;
         }
+
+        //decrementing the actual frequency by 1 to account for notification that
+        //already happens at time of event
+        frequencyOfA -= 1;
+        frequencyOfB -= 1;
+        frequencyOfC -= 1;
+        frequencyOfD -= 1;
+        frequencyOfE -= 1;
+        frequencyOfF -= 1;
 
 
         for (int i = 0; i < allReminders.size(); i++) {
