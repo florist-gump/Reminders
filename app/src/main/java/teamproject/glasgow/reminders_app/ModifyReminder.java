@@ -29,9 +29,11 @@ import java.util.Comparator;
 import java.util.List;
 
 import Helpers.DAYSOFTHEWEEK;
+import Helpers.HelperFunctions;
 import Helpers.PersistencyManager;
 import Model.Occurrence;
 import Model.Reminder;
+import Model.Task;
 import at.markushi.ui.CircleButton;
 
 public class ModifyReminder extends AppCompatActivity {
@@ -41,6 +43,7 @@ public class ModifyReminder extends AppCompatActivity {
     private TableLayout tableLayout;
     private Context context;
     private Reminder reminder;
+    private Task task;
     private int notificationFrequency = 0;
 
     @Override
@@ -67,6 +70,7 @@ public class ModifyReminder extends AppCompatActivity {
             case "modify_reminder":
                 isAddMode = false;
                 reminder = (Reminder) res.getSerializable("reminder");
+                task = reminder.getTask();
                 reminderIndex = res.getInt("index");
 //                Log.d("Nok", "check: ModifyReminder.java: "+reminder.getName()+" "+reminder.getOccurrences().size());
                 notificationFrequency = reminder.getOccurrences().get(0).getNotificationFrequency();
@@ -159,9 +163,20 @@ public class ModifyReminder extends AppCompatActivity {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             } else {
+                if (task != null) {
+                    reminder.setTask(task);
+                }
+                //TODO: Test this.
+                if(reminder.getTask() !=null) {
+                    //reminder = ExperimentSetup.setNotificationFrequency(reminder);
+                }
+                if (MyApp.getUserID() > 18) {
+                    HelperFunctions.setAllOccurrencesToInactive(reminder);
+                }
                 resultIntent.putExtra("reminder",reminder);
                 resultIntent.putExtra("index",reminderIndex);
                 setResult(Activity.RESULT_OK, resultIntent);
+
                 finish();
             }
 

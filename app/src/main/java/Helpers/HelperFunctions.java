@@ -33,4 +33,10 @@ public class HelperFunctions {
         reminders.addReminder(r);
         return reminders;
     }
+
+    public static  void setAllOccurrencesToInactive(Reminder r) {
+        for (Occurrence o : r.getOccurrences()) {
+            o.setIsActive(false);
+        }
+    }
 }

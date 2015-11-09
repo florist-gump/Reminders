@@ -194,7 +194,8 @@ public class Reminders extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
     }
 
-    private void setupDrawer() {
+    private void setupDrawer()
+    {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.drawer_open, R.string.drawer_close) {
 
@@ -210,9 +211,9 @@ public class Reminders extends AppCompatActivity {
                 supportInvalidateOptionsMenu();
             }
         };
+
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
 
     }
 
@@ -281,6 +282,11 @@ public class Reminders extends AppCompatActivity {
         inflater.inflate(R.menu.menu_reminders, menu);
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        if (android.os.Build.MANUFACTURER.equals("samsung")) {
+            searchItem.setVisible(false);
+        }
+
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
 
