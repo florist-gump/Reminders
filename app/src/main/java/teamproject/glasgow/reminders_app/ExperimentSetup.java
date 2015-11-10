@@ -360,12 +360,12 @@ public class ExperimentSetup extends AppCompatActivity {
 
         //decrementing the actual frequency by 1 to account for notification that
         //already happens at time of event
-        frequencyOfA -= 1;
-        frequencyOfB -= 1;
-        frequencyOfC -= 1;
-        frequencyOfD -= 1;
-        frequencyOfE -= 1;
-        frequencyOfF -= 1;
+//        frequencyOfA -= 1;
+//        frequencyOfB -= 1;
+//        frequencyOfC -= 1;
+//        frequencyOfD -= 1;
+//        frequencyOfE -= 1;
+//        frequencyOfF -= 1;
 
 
         for (int i = 0; i < allReminders.size(); i++) {
