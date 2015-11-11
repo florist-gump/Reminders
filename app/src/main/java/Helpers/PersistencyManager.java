@@ -92,7 +92,7 @@ public abstract class PersistencyManager {
         // to get userID call MyApp.getUserID();
         Log.d("Nok", "Log Survey Completetion");
         ParseStorageAdapter db_cloud = MyApp.getDBcloud();
-        db_cloud.createLogTaskComplete(MyApp.getUserID(), new Task("Do survey"));
+        db_cloud.createLogTaskComplete(MyApp.getUserID(), new Task("Do Survey Submit Button"));
     }
 
     public static void logAlert(Task task) {

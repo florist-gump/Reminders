@@ -33,6 +33,7 @@ public class ExperimentSetup extends AppCompatActivity {
     private List<Reminder> allReminders = MyApp.getReminders().getReminders();
 
     public static void treatment1() {
+        populateTaskReminders();
         //Assign treatment 1 frequencies
         occurrencesOfA = taskAReminder.getOccurrences();
         occurrencesOfB = taskBReminder.getOccurrences();
@@ -67,6 +68,7 @@ public class ExperimentSetup extends AppCompatActivity {
     }
 
     public static void treatment2() {
+        populateTaskReminders();
         NotificationManager.createNotification(null, "A Message From the Reminders App", "Notifications for " + taskA + " have been shut off.");
 
         occurrencesOfA = taskAReminder.getOccurrences();
@@ -78,6 +80,7 @@ public class ExperimentSetup extends AppCompatActivity {
     }
 
     public static void treatment3() {
+        populateTaskReminders();
         NotificationManager.createNotification(null, "A Message From the Reminders App", "Notifications for " + taskA + " have been turned on.");
         occurrencesOfA = taskAReminder.getOccurrences();
         for (Occurrence occurrence : occurrencesOfA) {
@@ -123,6 +126,8 @@ public class ExperimentSetup extends AppCompatActivity {
     }
 
     public static synchronized Reminder setNotificationFrequency(Reminder reminder) {
+
+        populateTaskReminders();
 
         String taskName = reminder.getName();
         List<Occurrence> occurrences = reminder.getOccurrences();
@@ -386,5 +391,26 @@ public class ExperimentSetup extends AppCompatActivity {
         // if you want to wake up the system at certain times to change occ look into the AlarmSetter and AlarmReceiver classes
         // a reboot cancels your alarms so you'd also have to do something similar to what I did in BootReceiver to restore your previously set Alarms
         finish();
+    }
+
+    public static synchronized void populateTaskReminders() {
+        List<Reminder> reminders = MyApp.getReminders().getReminders();
+        for (int i = 0; i < reminders.size(); i++) {
+
+            Model.Reminder reminder = reminders.get(i);
+            String reminderName = reminder.getTask().getName();
+
+            if (reminderName.equals(taskA)) {
+                taskAReminder = reminder;
+            }
+
+            if (reminderName.equals(taskB)) {
+                taskBReminder = reminder;
+            }
+
+            if (reminderName != null && !reminderName.equals(taskA) && !reminderName.equals(taskB)) {
+                otherTaskReminders.add(reminder);
+            }
+        }
     }
 }

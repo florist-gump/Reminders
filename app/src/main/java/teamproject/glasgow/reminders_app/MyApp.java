@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import Controllers.ParseStorageAdapter;
+import Helpers.PersistencyManager;
 import Model.*;
 import Model.Reminders;
 
@@ -28,8 +29,27 @@ public class MyApp extends Application {
         db_cloud = new ParseStorageAdapter();
     }
 
+    public static void initOnBroadCastReceiver(Context context) {
+        if(instance == null) {
+            instance = new MyApp();
+        }
+        if(prefs == null ) {
+            prefs = context.getSharedPreferences("teamproject.glasgow.reminders_app", MODE_PRIVATE);
+        }
+        if(context == null) {
+            MyApp.context = context;
+        }
+        if(reminders == null) {
+            reminders = PersistencyManager.getReminders();
+        }
+    }
+
     public static Context getContext() {
-        return instance.getApplicationContext();
+        if(instance != null) {
+            return instance.getApplicationContext();
+        } else {
+            return context;
+        }
     }
 
     public static synchronized Reminders getReminders() {
