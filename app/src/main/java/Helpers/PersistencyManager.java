@@ -77,9 +77,7 @@ public abstract class PersistencyManager {
 
         task = new Task("Send Evaluator an Email");
         tasks.add(task);
-
-        task = new Task("Exercise");
-        tasks.add(task);
+        
 
         task = new Task("Make Bed");
         tasks.add(task);
