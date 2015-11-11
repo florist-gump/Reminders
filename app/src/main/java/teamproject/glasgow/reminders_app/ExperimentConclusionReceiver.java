@@ -11,6 +11,6 @@ public class ExperimentConclusionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         ExperimentSetup.experimentConclusion();
-//        System.out.println("*********In ExperimentConclusionReceiver*********\n****************");
+        System.out.println("*********In ExperimentConclusionReceiver*********\n****************");
     }
 }

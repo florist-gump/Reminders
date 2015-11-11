@@ -66,7 +66,8 @@ public class Reminders extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prefs = getSharedPreferences("teamproject.glasgow.reminders_app", MODE_PRIVATE);
+        //prefs = getSharedPreferences("teamproject.glasgow.reminders_app", MODE_PRIVATE);
+        prefs = MyApp.getPrefs();
 
         setContentView(R.layout.activity_reminders);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -184,6 +185,12 @@ public class Reminders extends AppCompatActivity {
             intent.setClassName("teamproject.glasgow.reminders_app", "teamproject.glasgow.reminders_app.ExperimentSetup");
             startActivity(intent);
             prefs.edit().putBoolean("firstrun", false).commit();
+        }
+
+        if (!MyApp.trialStillRunning()) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);;
+            intent.setClassName("teamproject.glasgow.reminders_app", "teamproject.glasgow.reminders_app.ExperimentFinished");
+            startActivity(intent);
         }
     }
 

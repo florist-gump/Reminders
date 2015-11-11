@@ -116,6 +116,10 @@ public class ExperimentSetup extends AppCompatActivity {
     public static void experimentConclusion() {
         NotificationManager.createNotification(MyApp.getContext(), "The Experiment Is Finished!",
                 "Please delete the application now.");
+        if (MyApp.trialStillRunning()) {
+            MyApp.getReminders().cancelAlarmsForAllReminders();
+            MyApp.setTrialStillRunning(false);
+        }
     }
 
     public static synchronized Reminder setNotificationFrequency(Reminder reminder) {

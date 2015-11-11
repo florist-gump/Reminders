@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".MyApp"
@@ -19,10 +19,11 @@
         <receiver android:name=".Treatment2Receiver" />
         <receiver android:name=".Treatment3Receiver" />
         <receiver android:name=".ExperimentConclusionReceiver" />
-        <receiver android:name=".BootReceiver"
-            android:enabled="true">
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
@@ -52,6 +53,8 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity android:name=".ExperimentSetup" >
+        </activity>
+        <activity android:name=".ExperimentFinished" >
         </activity>
     </application>
 

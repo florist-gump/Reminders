@@ -44,6 +44,18 @@ public class MyApp extends Application {
         return prefs.getInt("user_id", -1);
     }
 
+    public static boolean trialStillRunning() {
+        return prefs.getBoolean("trialrunning", true);
+    }
+
+    public static void setTrialStillRunning(boolean b) {
+        prefs.edit().putBoolean("trialrunning", b).commit();
+    }
+
+    public static SharedPreferences getPrefs() {
+        return MyApp.prefs;
+    }
+
     public static Context getAppContext() {
         return MyApp.context;
     }
