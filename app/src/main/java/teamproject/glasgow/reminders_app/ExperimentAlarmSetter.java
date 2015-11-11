@@ -22,9 +22,6 @@ public class ExperimentAlarmSetter {
 
 
     //TODO: test that these work
-    //TODO: address reboot issue
-
-    //
     public static void waitUntil19th(){
         calendar.set(2015, Calendar.NOVEMBER, 19, 12, 0);
 

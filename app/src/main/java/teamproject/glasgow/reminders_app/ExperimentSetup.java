@@ -25,11 +25,10 @@ public class ExperimentSetup extends AppCompatActivity {
     private static Model.Reminder taskAReminder = null;
     private static Model.Reminder taskBReminder = null;
     private static List<Model.Reminder> otherTaskReminders = new ArrayList<Model.Reminder>();
-    private static int frequencyOfA = 0, frequencyOfB = 0, frequencyOfC = 0, frequencyOfD = 0,
-            frequencyOfE = 0, frequencyOfF = 0;
+    private static int frequencyOfA, frequencyOfB, frequencyOfC, frequencyOfD,
+            frequencyOfE, frequencyOfF;
     private static List<Occurrence> occurrencesOfA, occurrencesOfB, occurrencesOfC, occurrencesOfD,
             occurrencesOfE, occurrencesOfF;
-    private final int participantID = MyApp.getUserID();
     private final List<Model.Task> allTasks = PersistencyManager.getTasks();
     private List<Reminder> allReminders = MyApp.getReminders().getReminders();
 
@@ -68,11 +67,7 @@ public class ExperimentSetup extends AppCompatActivity {
     }
 
     public static void treatment2() {
-        NotificationManager.createNotification(null, "A Message From the Reminders App Due to certain circumstances of the experiment,\" +\n" +
-                "                \"we will be turning off notifications associated with \"+taskA+\". In the mean time, please try and remember to do \" +\n" +
-                "                \"it on your own. Sorry for the inconvenience.", "Due to certain circumstances of the experiment," +
-                "we will be turning off notifications associated with " + taskA + ". In the mean time, please try and remember to do " +
-                "it on your own. Sorry for the inconvenience.");
+        NotificationManager.createNotification(null, "A Message From the Reminders App", "Notifications for " + taskA + " have been shut off.");
 
         occurrencesOfA = taskAReminder.getOccurrences();
 
@@ -83,8 +78,7 @@ public class ExperimentSetup extends AppCompatActivity {
     }
 
     public static void treatment3() {
-        NotificationManager.createNotification(null, "A Message From the Reminders App", "We have turned the notifications for " +
-                "back on. Thanks for your patience.");
+        NotificationManager.createNotification(null, "A Message From the Reminders App", "Notifications for " + taskA + " have been turned on.");
         occurrencesOfA = taskAReminder.getOccurrences();
         for (Occurrence occurrence : occurrencesOfA) {
             occurrence.setIsActive(true);
@@ -121,11 +115,7 @@ public class ExperimentSetup extends AppCompatActivity {
 
     public static void experimentConclusion() {
         NotificationManager.createNotification(MyApp.getContext(), "The Experiment Is Finished!",
-                "Thank you for participating in our experiment. The experiment has now ended. Please" +
-                        " make sure to delete the Reminders application from your phone as it is not" +
-                        "designed to be used after this point. The last part of the study is a short" +
-                        "exit survey. If you have not already made arrangements to do this, then" +
-                        "please contact us as soon as possible. Thank you again for your participation!");
+                "Please delete the application now.");
     }
 
     public static synchronized Reminder setNotificationFrequency(Reminder reminder) {
@@ -208,165 +198,154 @@ public class ExperimentSetup extends AppCompatActivity {
 
         System.out.println("*******Printing here!*******");
 
-        //TODO: subtract 1 from below values
-        switch (participantID) {
+        switch (userID) {
             case 1:
-                frequencyOfA = 1;
-                frequencyOfB = 1;
-                frequencyOfC = 1;
-                frequencyOfD = 3;
-                frequencyOfE = 1;
-                frequencyOfF = 1;
+                frequencyOfA = 0;
+                frequencyOfB = 0;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 0;
+                frequencyOfF = 0;
                 break;
             case 2:
-                frequencyOfA = 2;
-                frequencyOfB = 2;
-                frequencyOfC = 3;
-                frequencyOfD = 1;
-                frequencyOfE = 1;
-                frequencyOfF = 1;
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 2;
+                frequencyOfD = 0;
+                frequencyOfE = 0;
+                frequencyOfF = 0;
                 break;
             case 3:
-                frequencyOfA = 3;
-                frequencyOfB = 3;
-                frequencyOfC = 2;
-                frequencyOfD = 2;
-                frequencyOfE = 1;
-                frequencyOfF = 1;
+                frequencyOfA = 2;
+                frequencyOfB = 2;
+                frequencyOfC = 1;
+                frequencyOfD = 1;
+                frequencyOfE = 0;
+                frequencyOfF = 0;
                 break;
             case 4:
-                frequencyOfA = 1;
-                frequencyOfB = 3;
-                frequencyOfC = 1;
-                frequencyOfD = 2;
-                frequencyOfE = 2;
-                frequencyOfF = 1;
+                frequencyOfA = 0;
+                frequencyOfB = 2;
+                frequencyOfC = 0;
+                frequencyOfD = 1;
+                frequencyOfE = 1;
+                frequencyOfF = 0;
                 break;
             case 5:
-                frequencyOfA = 2;
-                frequencyOfB = 2;
-                frequencyOfC = 1;
-                frequencyOfD = 2;
-                frequencyOfE = 1;
-                frequencyOfF = 2;
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 0;
+                frequencyOfD = 1;
+                frequencyOfE = 0;
+                frequencyOfF = 1;
                 break;
             case 6:
-                frequencyOfA = 3;
-                frequencyOfB = 1;
-                frequencyOfC = 1;
-                frequencyOfD = 1;
-                frequencyOfE = 2;
-                frequencyOfF = 2;
+                frequencyOfA = 2;
+                frequencyOfB = 0;
+                frequencyOfC = 0;
+                frequencyOfD = 0;
+                frequencyOfE = 1;
+                frequencyOfF = 1;
                 break;
             case 7:
-                frequencyOfA = 1;
-                frequencyOfB = 1;
-                frequencyOfC = 2;
-                frequencyOfD = 2;
-                frequencyOfE = 2;
-                frequencyOfF = 2;
+                frequencyOfA = 0;
+                frequencyOfB = 0;
+                frequencyOfC = 1;
+                frequencyOfD = 1;
+                frequencyOfE = 1;
+                frequencyOfF = 1;
                 break;
             case 8:
-                frequencyOfA = 2;
-                frequencyOfB = 2;
-                frequencyOfC = 1;
-                frequencyOfD = 3;
-                frequencyOfE = 2;
-                frequencyOfF = 2;
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 1;
+                frequencyOfF = 1;
                 break;
             case 9:
-                frequencyOfA = 3;
-                frequencyOfB = 3;
-                frequencyOfC = 1;
-                frequencyOfD = 2;
-                frequencyOfE = 3;
-                frequencyOfF = 2;
+                frequencyOfA = 2;
+                frequencyOfB = 2;
+                frequencyOfC = 0;
+                frequencyOfD = 1;
+                frequencyOfE = 2;
+                frequencyOfF = 1;
                 break;
             case 10:
-                frequencyOfA = 1;
-                frequencyOfB = 3;
-                frequencyOfC = 1;
-                frequencyOfD = 2;
-                frequencyOfE = 2;
-                frequencyOfF = 3;
+                frequencyOfA = 0;
+                frequencyOfB = 2;
+                frequencyOfC = 0;
+                frequencyOfD = 1;
+                frequencyOfE = 1;
+                frequencyOfF = 2;
                 break;
             case 11:
-                frequencyOfA = 2;
-                frequencyOfB = 2;
-                frequencyOfC = 1;
-                frequencyOfD = 1;
-                frequencyOfE = 3;
-                frequencyOfF = 3;
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 0;
+                frequencyOfD = 0;
+                frequencyOfE = 2;
+                frequencyOfF = 2;
                 break;
             case 12:
-                frequencyOfA = 3;
-                frequencyOfB = 1;
-                frequencyOfC = 1;
-                frequencyOfD = 3;
-                frequencyOfE = 1;
-                frequencyOfF = 3;
+                frequencyOfA = 2;
+                frequencyOfB = 0;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 0;
+                frequencyOfF = 2;
                 break;
             case 13:
-                frequencyOfA = 1;
-                frequencyOfB = 1;
-                frequencyOfC = 2;
-                frequencyOfD = 3;
-                frequencyOfE = 2;
-                frequencyOfF = 3;
+                frequencyOfA = 0;
+                frequencyOfB = 0;
+                frequencyOfC = 1;
+                frequencyOfD = 2;
+                frequencyOfE = 1;
+                frequencyOfF = 2;
                 break;
             case 14:
-                frequencyOfA = 2;
-                frequencyOfB = 2;
-                frequencyOfC = 2;
-                frequencyOfD = 2;
-                frequencyOfE = 3;
-                frequencyOfF = 3;
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 1;
+                frequencyOfD = 1;
+                frequencyOfE = 2;
+                frequencyOfF = 2;
                 break;
             case 15:
-                frequencyOfA = 3;
-                frequencyOfB = 3;
-                frequencyOfC = 1;
-                frequencyOfD = 3;
-                frequencyOfE = 3;
-                frequencyOfF = 3;
-                break;
-            case 16:
-                frequencyOfA = 1;
-                frequencyOfB = 3;
-                frequencyOfC = 3;
-                frequencyOfD = 1;
-                frequencyOfE = 3;
-                frequencyOfF = 3;
-                break;
-            case 17:
                 frequencyOfA = 2;
                 frequencyOfB = 2;
-                frequencyOfC = 3;
-                frequencyOfD = 3;
-                frequencyOfE = 1;
-                frequencyOfF = 3;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 2;
+                frequencyOfF = 2;
+                break;
+            case 16:
+                frequencyOfA = 0;
+                frequencyOfB = 2;
+                frequencyOfC = 2;
+                frequencyOfD = 0;
+                frequencyOfE = 2;
+                frequencyOfF = 2;
+                break;
+            case 17:
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 2;
+                frequencyOfD = 2;
+                frequencyOfE = 0;
+                frequencyOfF = 2;
                 break;
             case 18:
-                frequencyOfA = 3;
-                frequencyOfB = 1;
-                frequencyOfC = 3;
-                frequencyOfD = 3;
-                frequencyOfE = 3;
-                frequencyOfF = 1;
+                frequencyOfA = 2;
+                frequencyOfB = 0;
+                frequencyOfC = 2;
+                frequencyOfD = 2;
+                frequencyOfE = 2;
+                frequencyOfF = 0;
                 break;
             default:
                 break;
         }
-
-        //decrementing the actual frequency by 1 to account for notification that
-        //already happens at time of event
-        frequencyOfA -= 1;
-        frequencyOfB -= 1;
-        frequencyOfC -= 1;
-        frequencyOfD -= 1;
-        frequencyOfE -= 1;
-        frequencyOfF -= 1;
-
 
         for (int i = 0; i < allReminders.size(); i++) {
 
