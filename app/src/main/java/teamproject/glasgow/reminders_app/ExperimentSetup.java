@@ -20,8 +20,8 @@ import Model.Reminder;
 public class ExperimentSetup extends AppCompatActivity {
 
 
-    private final static String taskA = "Take Multivitamin";
-    private final static String taskB = "Take a Nap";
+    private final static String taskA = "Floss Teeth";
+    private final static String taskB = "Do Survey";
     private static Model.Reminder taskAReminder = null;
     private static Model.Reminder taskBReminder = null;
     private static List<Model.Reminder> otherTaskReminders = new ArrayList<Model.Reminder>();
