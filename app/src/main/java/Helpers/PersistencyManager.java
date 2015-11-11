@@ -65,22 +65,26 @@ public abstract class PersistencyManager {
 
     private static ArrayList<Task> createTasks() {
         ArrayList<Task> tasks = new ArrayList<Task>();
-        Task task = new Task("Take Multivitamin");
+
+        Task task = new Task("Floss Teeth");
         tasks.add(task);
 
-        task = new Task("Take a Nap");
+        task = new Task("Do Survey");
         tasks.add(task);
 
-        task = new Task("Study");
+        task = new Task("Eat a snack");
         tasks.add(task);
 
-        task = new Task("Return Library Book");
+        task = new Task("Send Evaluator an Email");
         tasks.add(task);
 
-        task = new Task("Meeting with Evaluator");
+        task = new Task("Exercise");
         tasks.add(task);
 
-        task = new Task("Make bed");
+        task = new Task("Make Bed");
+        tasks.add(task);
+
+        task = new Task("Eat out");
         tasks.add(task);
 
         return tasks;

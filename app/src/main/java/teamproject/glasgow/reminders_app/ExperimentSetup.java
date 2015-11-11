@@ -347,6 +347,7 @@ public class ExperimentSetup extends AppCompatActivity {
                 break;
         }
 
+
         for (int i = 0; i < allReminders.size(); i++) {
 
             Model.Reminder reminder = allReminders.get(i);

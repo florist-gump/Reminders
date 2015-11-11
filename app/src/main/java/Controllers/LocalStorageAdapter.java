@@ -58,6 +58,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
     private static final String KEY_NOTIFICATION_FREQUENCY = "notification_frequency";
     private static final String KEY_REMINDER_ID = "reminder_id";
     private static final String KEY_STATUS = "status";
+    private static final String KEY_ID_ID = "id_id";
 
     private static final String KEY_OCCURRENCE_ID = "occurrence_id";
     private static final String KEY_VALUE_ALAREMID = "value_alarmID";
@@ -73,7 +74,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
 
     // Occurrences table create statement
     private static final String CREATE_TABLE_OCCURRENCES = "CREATE TABLE " + TABLE_OCCURRENCES
-            + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_REMINDER_ID + " INTEGER,"
+            + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_REMINDER_ID + " INTEGER,"+ KEY_ID_ID + " INTEGER,"
             + KEY_DAY + " TEXT," + KEY_TIME + " DATETIME," + KEY_NOTIFICATION_FREQUENCY + " INTEGER," + KEY_STATUS + " BOOLEAN"
             + ")";
 
@@ -174,6 +175,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_REMINDER_ID, reminder_id);
+        values.put(KEY_ID_ID, String.valueOf(occurrence.getId()));
         values.put(KEY_DAY, String.valueOf(occurrence.getDay()));
         values.put(KEY_TIME, String.valueOf(occurrence.getTime()));
         values.put(KEY_NOTIFICATION_FREQUENCY, occurrence.getNotificationFrequency());
@@ -279,6 +281,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
                 }
 
                 Occurrence o = new Occurrence(d, LocalTime.parse(c.getString(c.getColumnIndex(KEY_TIME))), r, c.getInt(c.getColumnIndex(KEY_NOTIFICATION_FREQUENCY)));
+                o.setId(c.getInt(c.getColumnIndex(KEY_ID_ID)));
                 List<Integer> alarmIDs = getAllAlarmIDs(c.getInt(c.getColumnIndex(KEY_ID)));
                 o.setAlarmIds(alarmIDs);
                 occurrences.add(o);
