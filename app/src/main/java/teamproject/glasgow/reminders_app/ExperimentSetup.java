@@ -89,19 +89,19 @@ public class ExperimentSetup extends AppCompatActivity {
         occurrencesOfB = taskBReminder.getOccurrences();
 
         Random randomGen = new Random();
-        int rand1 = randomGen.nextInt(occurrencesOfB.size());
-        int rand2 = randomGen.nextInt(occurrencesOfB.size());
-        int rand3 = randomGen.nextInt(occurrencesOfB.size());
-        int rand4 = randomGen.nextInt(occurrencesOfB.size());
-        int rand5 = randomGen.nextInt(occurrencesOfB.size());
-
-        //TODO: Debug this
-        List<Integer> randomNums = new ArrayList<Integer>();
-        randomNums.add(rand1);
-        randomNums.add(rand2);
-        randomNums.add(rand3);
-        randomNums.add(rand4);
-        randomNums.add(rand5);
+//        int rand1 = randomGen.nextInt(occurrencesOfB.size());
+//        int rand2 = randomGen.nextInt(occurrencesOfB.size());
+//        int rand3 = randomGen.nextInt(occurrencesOfB.size());
+//        int rand4 = randomGen.nextInt(occurrencesOfB.size());
+//        int rand5 = randomGen.nextInt(occurrencesOfB.size());
+//
+//        //TODO: Debug this
+        List<Integer> uniqueRandomNums = new ArrayList<Integer>();
+//        uniqueRandomNums.add(rand1);
+//        uniqueRandomNums.add(rand2);
+//        uniqueRandomNums.add(rand3);
+//        uniqueRandomNums.add(rand4);
+//        uniqueRandomNums.add(rand5);
 
         int rand = 0;
 
@@ -110,15 +110,21 @@ public class ExperimentSetup extends AppCompatActivity {
             rand = randomGen.nextInt(occurrencesOfB.size());
             if (i < occurrencesOfB.size()) {
                 boolean isRepeat = false;
-                for (int j = 0; j < randomNums.size(); j++) {
-                    if (randomNums.get(j) == rand) isRepeat = true;
+                for (int j = 0; j < uniqueRandomNums.size(); j++) {
+                    if (uniqueRandomNums.get(j) == rand){
+                        isRepeat = true;
+                        i--;
+                    }
                 }
-                if (isRepeat == false) randomNums.add(rand);
+                if (isRepeat == false) uniqueRandomNums.add(rand);
             }
         }
 
-        for (int i = 0; i < randomNums.size(); i++) {
-            int aRandomNum = randomNums.get(i);
+
+
+        for (int i = 0; i < uniqueRandomNums.size(); i++) {
+            int aRandomNum = uniqueRandomNums.get(i);
+            System.out.println("*****aRandomNum= "+aRandomNum);
             occurrencesOfB.get(aRandomNum).setIsActive(false);
         }
     }
