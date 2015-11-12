@@ -21,7 +21,6 @@ public class ExperimentAlarmSetter {
     private static int randAlarmID = RandomNumberGen.getInstance().randomInt();
 
 
-    //TODO: test that these work
     public static void waitUntil19th(){
         calendar.set(2015, Calendar.NOVEMBER, 19, 12, 0);
 

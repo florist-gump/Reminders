@@ -92,7 +92,14 @@ public class ExperimentSetup extends AppCompatActivity {
         int rand4 = randomGen.nextInt(occurrencesOfB.size());
         int rand5 = randomGen.nextInt(occurrencesOfB.size());
 
+        //TODO: Debug this
         List<Integer> randomNums = new ArrayList<Integer>();
+        randomNums.add(rand1);
+        randomNums.add(rand2);
+        randomNums.add(rand3);
+        randomNums.add(rand4);
+        randomNums.add(rand5);
+
         int rand = 0;
 
         //TODO: test this randomNum algorithm
@@ -366,9 +373,7 @@ public class ExperimentSetup extends AppCompatActivity {
             }
         }
 
-
         treatment1();
-
 
         ExperimentAlarmSetter.waitUntil19th();
 
