@@ -14,6 +14,8 @@ import Model.Reminder;
 public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        MyApp.initOnBroadCastReceiver(context);
+
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             for (Reminder reminder : PersistencyManager.getReminders().getReminders()) {
                 AlarmSetter.setRepeatingAlarmForReminder(reminder, null);

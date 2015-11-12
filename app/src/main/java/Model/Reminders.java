@@ -100,4 +100,10 @@ public class Reminders extends Observable implements Serializable {
         return null;
     }
 
+    public void cancelAlarmsForAllReminders() {
+        for(Reminder reminder : reminders) {
+            AlarmSetter.cancelRepeatingAlarmForReminder(reminder, null);
+        }
+    }
+
 }

@@ -10,7 +10,9 @@ import android.content.Intent;
 public class ExperimentConclusionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        MyApp.initOnBroadCastReceiver(context);
+
         ExperimentSetup.experimentConclusion();
-//        System.out.println("*********In ExperimentConclusionReceiver*********\n****************");
+        System.out.println("*********In ExperimentConclusionReceiver*********\n****************");
     }
 }

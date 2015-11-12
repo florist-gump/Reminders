@@ -10,6 +10,8 @@ import android.content.Intent;
 public class Treatment2Receiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        MyApp.initOnBroadCastReceiver(context);
+
         ExperimentSetup.treatment2();
         System.out.println("*********In Treatment2Receiver *********\n****************");
     }

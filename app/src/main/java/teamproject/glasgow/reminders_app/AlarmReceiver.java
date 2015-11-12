@@ -25,6 +25,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        MyApp.initOnBroadCastReceiver(context);
 
         Reminder reminder = (Reminder)intent.getSerializableExtra("Reminder");
         Occurrence occurrence = (Occurrence)intent.getSerializableExtra("Occurrence");
