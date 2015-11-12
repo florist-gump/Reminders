@@ -78,10 +78,10 @@ public abstract class PersistencyManager {
         task = new Task("Send Evaluator an Email");
         tasks.add(task);
 
-        task = new Task("Make Bed");
+        task = new Task("Light Exercise");
         tasks.add(task);
 
-        task = new Task("Eat out");
+        task = new Task("Eat Out");
         tasks.add(task);
 
         return tasks;
