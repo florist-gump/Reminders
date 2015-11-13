@@ -81,7 +81,7 @@ public abstract class PersistencyManager {
         task = new Task("Light Exercise");
         tasks.add(task);
 
-        task = new Task("Eat Out");
+        task = new Task("Drink an Extra Glass of Water With Your Next Meal");
         tasks.add(task);
 
         return tasks;
