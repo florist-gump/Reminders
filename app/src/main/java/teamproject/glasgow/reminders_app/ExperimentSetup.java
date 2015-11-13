@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -145,10 +146,25 @@ public class ExperimentSetup extends AppCompatActivity {
         String taskName = reminder.getName();
         List<Occurrence> occurrences = reminder.getOccurrences();
 
-        String taskC = otherTaskReminders.get(0).getName();
-        String taskD = otherTaskReminders.get(1).getName();
-        String taskE = otherTaskReminders.get(2).getName();
-        String taskF = otherTaskReminders.get(3).getName();
+        String taskC = "";
+        if(otherTaskReminders.size() > 0) {
+            taskC = otherTaskReminders.get(0).getName();
+        }
+
+        String taskD = "";
+        if(otherTaskReminders.size() > 1) {
+            taskD = otherTaskReminders.get(1).getName();
+        }
+
+        String taskE = "";
+        if(otherTaskReminders.size() > 2) {
+            taskE = otherTaskReminders.get(2).getName();
+        }
+
+        String taskF = "";
+        if(otherTaskReminders.size() > 3) {
+            taskF = otherTaskReminders.get(3).getName();
+        }
 
         if (taskName.equals(taskA)) {
             for (Occurrence occurrence : occurrences) {
@@ -195,10 +211,9 @@ public class ExperimentSetup extends AppCompatActivity {
     }
 
     public void start(View view) {
-        SharedPreferences prefs = getSharedPreferences("teamproject.glasgow.reminders_app", MODE_PRIVATE);
 
         EditText text = (EditText) findViewById(R.id.user_id);
-        
+
         int userID;
         try {
             userID = Integer.parseInt(text.getText().toString());
@@ -215,8 +230,7 @@ public class ExperimentSetup extends AppCompatActivity {
                     .show();
             return;
         }
-        prefs.edit().putInt("user_id", userID).commit();
-
+        MyApp.setUserID(userID);
 
         System.out.println("*******Printing here!*******");
 
@@ -409,19 +423,45 @@ public class ExperimentSetup extends AppCompatActivity {
         for (int i = 0; i < reminders.size(); i++) {
 
             Model.Reminder reminder = reminders.get(i);
-            String reminderName = reminder.getTask().getName();
+            if(reminder.getTask() != null) {
+                String reminderName = reminder.getTask().getName();
 
-            if (reminderName.equals(taskA)) {
-                taskAReminder = reminder;
-            }
+                if (reminderName.equals(taskA)) {
+                    taskAReminder = reminder;
+                }
 
-            if (reminderName.equals(taskB)) {
-                taskBReminder = reminder;
-            }
+                if (reminderName.equals(taskB)) {
+                    taskBReminder = reminder;
+                }
 
-            if (reminderName != null && !reminderName.equals(taskA) && !reminderName.equals(taskB)) {
-                otherTaskReminders.add(reminder);
+                if (reminderName != null && !reminderName.equals(taskA) && !reminderName.equals(taskB)) {
+                    otherTaskReminders.add(reminder);
+                }
             }
         }
+    }
+
+    public static synchronized Reminder setIsActive(Reminder reminder) {
+        populateTaskReminders();
+
+        Calendar afterNov19 = Calendar.getInstance();
+        afterNov19.set(2015, Calendar.NOVEMBER, 19, 12, 0);
+
+        Calendar afterNov23 = Calendar.getInstance();
+        afterNov23.set(2015, Calendar.NOVEMBER, 23, 12, 0);
+
+        List<Occurrence> occurrences = reminder.getOccurrences();
+
+        if(reminder.getTask() != null) {
+            String taskName = reminder.getTask().getName();
+
+            if (taskName.equals(taskA) && (Calendar.getInstance().getTimeInMillis() - afterNov19.getTimeInMillis() > 0) && (afterNov23.getTimeInMillis() - Calendar.getInstance().getTimeInMillis() > 0)) {
+                for (Occurrence occurrence : occurrences) {
+                    occurrence.setIsActive(false);
+                }
+            }
+        }
+
+        return reminder;
     }
 }

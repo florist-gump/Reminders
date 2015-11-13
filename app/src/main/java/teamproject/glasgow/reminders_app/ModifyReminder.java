@@ -167,6 +167,7 @@ public class ModifyReminder extends AppCompatActivity {
                     reminder.setTask(task);
                     //TODO: Test this.
                     reminder = ExperimentSetup.setNotificationFrequency(reminder);
+                    reminder = ExperimentSetup.setIsActive(reminder);
                 }
 
 
@@ -219,7 +220,7 @@ public class ModifyReminder extends AppCompatActivity {
 
             checkBox = (CheckBox) row.findViewById(R.id.check_we);
             if(checkBox.isChecked()) {
-                o = new Occurrence(DAYSOFTHEWEEK.WEDNESDAY, time, reminder,0);
+                o = new Occurrence(DAYSOFTHEWEEK.WEDNESDAY, time, reminder,notificationFrequency);
                 reminder.addOccurrence(o);
             }
 
@@ -231,19 +232,19 @@ public class ModifyReminder extends AppCompatActivity {
 
             checkBox = (CheckBox) row.findViewById(R.id.check_fr);
             if(checkBox.isChecked()) {
-                o = new Occurrence(DAYSOFTHEWEEK.FRIDAY, time, reminder,0);
+                o = new Occurrence(DAYSOFTHEWEEK.FRIDAY, time, reminder,notificationFrequency);
                 reminder.addOccurrence(o);
             }
 
             checkBox = (CheckBox) row.findViewById(R.id.check_sa);
             if(checkBox.isChecked()) {
-                o = new Occurrence(DAYSOFTHEWEEK.SATURDAY, time, reminder,0);
+                o = new Occurrence(DAYSOFTHEWEEK.SATURDAY, time, reminder,notificationFrequency);
                 reminder.addOccurrence(o);
             }
 
             checkBox = (CheckBox) row.findViewById(R.id.check_su);
             if(checkBox.isChecked()) {
-                o = new Occurrence(DAYSOFTHEWEEK.SUNDAY, time, reminder,0);
+                o = new Occurrence(DAYSOFTHEWEEK.SUNDAY, time, reminder,notificationFrequency);
                 reminder.addOccurrence(o);
             }
 

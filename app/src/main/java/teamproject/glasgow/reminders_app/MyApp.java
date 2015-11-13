@@ -64,6 +64,10 @@ public class MyApp extends Application {
         return prefs.getInt("user_id", -1);
     }
 
+    public static void setUserID(int userID) {
+        prefs.edit().putInt("user_id", userID).commit();
+    }
+
     public static boolean trialStillRunning() {
         return prefs.getBoolean("trialrunning", true);
     }

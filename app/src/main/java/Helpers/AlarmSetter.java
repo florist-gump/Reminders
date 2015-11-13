@@ -63,9 +63,10 @@ public abstract class AlarmSetter {
         if (dayofweek == Calendar.SATURDAY) {
             dateShift = (o.getDay().ordinal() - DAYSOFTHEWEEK.SATURDAY.ordinal()) % 7;
         }
-        if (dateShift<0) dateShift += 7;
+        if (dateShift<0) { dateShift += 7;}
         if(dateShift == 0) {
-            if(Minutes.minutesBetween(LocalTime.now(), o.getTime()).getMinutes() < 0) {
+            //if(Minutes.minutesBetween(LocalTime.now(), o.getTime()).getMinutes() <= 0) {
+            if(LocalTime.now().isAfter(o.getTime())) {
                 dateShift = 7;
             }
         }
