@@ -65,6 +65,7 @@ public class Reminders extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MyApp.initOnBroadCastReceiver(this);
         super.onCreate(savedInstanceState);
         //prefs = getSharedPreferences("teamproject.glasgow.reminders_app", MODE_PRIVATE);
         prefs = MyApp.getPrefs();
@@ -92,7 +93,8 @@ public class Reminders extends AppCompatActivity {
             PersistencyManager.saveReminders(reminders, true);
         }
         else {
-            reminders = PersistencyManager.getReminders();
+            //reminders = PersistencyManager.getReminders();
+            reminders = MyApp.getReminders();
         }
 
         //reminders = cloudMem.getRemindersFromDB();
