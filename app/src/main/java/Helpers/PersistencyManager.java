@@ -64,6 +64,7 @@ public abstract class PersistencyManager {
     }
 
     private static ArrayList<Task> createTasks() {
+
         ArrayList<Task> tasks = new ArrayList<Task>();
 
         Task task = new Task("Floss Teeth");
