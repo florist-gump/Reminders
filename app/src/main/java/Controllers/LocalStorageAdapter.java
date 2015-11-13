@@ -282,6 +282,12 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
 
                 Occurrence o = new Occurrence(d, LocalTime.parse(c.getString(c.getColumnIndex(KEY_TIME))), r, c.getInt(c.getColumnIndex(KEY_NOTIFICATION_FREQUENCY)));
                 o.setId(c.getInt(c.getColumnIndex(KEY_ID_ID)));
+                if(c.getInt(c.getColumnIndex(KEY_STATUS)) != 0){
+                    o.setIsActive(true);
+                }else{
+                    o.setIsActive(false);
+                }
+
                 List<Integer> alarmIDs = getAllAlarmIDs(c.getInt(c.getColumnIndex(KEY_ID)));
                 o.setAlarmIds(alarmIDs);
                 occurrences.add(o);
