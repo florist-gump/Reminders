@@ -235,6 +235,14 @@ public class ExperimentSetup extends AppCompatActivity {
         System.out.println("*******Printing here!*******");
 
         switch (userID) {
+            case 0:
+                frequencyOfA = 2;
+                frequencyOfB = 2;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 0;
+                frequencyOfF = 0;
+                break;
             case 1:
                 frequencyOfA = 0;
                 frequencyOfB = 0;

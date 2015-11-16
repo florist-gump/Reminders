@@ -42,6 +42,9 @@ public class Reminders extends Observable implements Serializable {
         setChanged();
         notifyObservers();
     }
+    public void _addReminder(Reminder reminder) {
+        this.reminders.add(reminder);
+    }
 
     public void modifyReminder(Reminder reminder, int index) {
         this.reminders.set(index, reminder);

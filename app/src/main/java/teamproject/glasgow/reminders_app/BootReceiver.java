@@ -14,12 +14,21 @@ import Model.Reminder;
 public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+
         MyApp.initOnBroadCastReceiver(context);
 
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            for (Reminder reminder : PersistencyManager.getReminders().getReminders()) {
+            /*
+            Intent i = new Intent(context, Reminders.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("restart",true);
+            context.startActivity(i);
+            */
+
+            for (Reminder reminder : MyApp.getReminders().getReminders()) {
                 AlarmSetter.setRepeatingAlarmForReminder(reminder, null);
             }
+
             //TODO: Test this
             ExperimentAlarmSetter.waitUntil19th();
             ExperimentAlarmSetter.waitUntil23rd();

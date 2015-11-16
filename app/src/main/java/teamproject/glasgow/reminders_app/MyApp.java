@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import Controllers.ParseStorageAdapter;
 import Helpers.PersistencyManager;
@@ -42,6 +43,7 @@ public class MyApp extends Application {
         if(reminders == null) {
             reminders = PersistencyManager.getReminders();
         }
+        Log.d("Context:",context.toString());
     }
 
     public static Context getContext() {
@@ -53,6 +55,15 @@ public class MyApp extends Application {
     }
 
     public static synchronized Reminders getReminders() {
+        for(Reminder reminder : reminders.getReminders()) {
+            for(Occurrence o : reminder.getOccurrences()) {
+                for(Integer i : o.getAlarmIds()) {
+                    Log.d("x1 alarmids getRem", o.getReminder().getName() + o.getDay() + i.toString());
+                }
+                Log.d("x1 getRem active", o.getIsActive().toString());
+                Log.d("x1 getRem freq", Integer.toString(o.getNotificationFrequency()));
+            }
+        }
         return reminders;
     }
 

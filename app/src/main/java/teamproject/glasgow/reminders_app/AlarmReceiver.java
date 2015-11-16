@@ -35,6 +35,9 @@ public class AlarmReceiver extends BroadcastReceiver {
             occurrence = MyApp.getReminders().getOccurenceFromId(occurrence.getId());
             reminder = occurrence.getReminder();
         }
+        else {
+            return;
+        }
 
         if(reminder != null && occurrence != null) {
             if(reminder.getTask() != null) {

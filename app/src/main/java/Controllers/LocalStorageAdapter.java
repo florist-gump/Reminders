@@ -231,7 +231,7 @@ public class LocalStorageAdapter extends SQLiteOpenHelper {
                 reminder.setTask(t);
                 ArrayList <Occurrence> occurrences = getAllOccurrences(reminder_id, reminder );
                 reminder.setOccurrences(occurrences);
-                reminders.addReminder(reminder);
+                reminders._addReminder(reminder);
             } while (c.moveToNext());
         }
 

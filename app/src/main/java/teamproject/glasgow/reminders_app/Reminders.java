@@ -157,6 +157,10 @@ public class Reminders extends AppCompatActivity {
         _reminders = this;
         MyApp.setReminders(reminders);
         UserID = MyApp.getUserID();
+        Intent i = this.getIntent();
+        if(i.getBooleanExtra("restart",false)) {
+            moveTaskToBack(true);
+        }
     }
 
 //    @Override

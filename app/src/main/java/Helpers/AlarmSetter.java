@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import org.joda.time.LocalTime;
 import org.joda.time.Minutes;
@@ -26,6 +27,9 @@ public abstract class AlarmSetter {
             context = MyApp.getContext();
         }
         for (Occurrence o : reminder.getOccurrences()) {
+            for(Integer i : o.getAlarmIds()) {
+                Log.d("alarmids set", o.getReminder().getName() + o.getDay() + i.toString());
+            }
             cancleAllAlarmsForOccurrence(o, context);
             setAllAlarmsForOccurrence(o, context);
         }
@@ -81,14 +85,17 @@ public abstract class AlarmSetter {
         intent1.putExtra("Reminder", o.getReminder());
         intent1.putExtra("Occurrence", o);
         int alarmId = RandomNumberGen.getInstance().randomInt();
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
         o.getAlarmIds().add(alarmId);
         if(o.getNotificationFrequency() > 0) {
             for (int i = 1; i <= o.getNotificationFrequency(); i++) {
+                intent1 = new Intent(context, AlarmReceiver.class);
+                intent1.putExtra("Reminder", o.getReminder());
+                intent1.putExtra("Occurrence", o);
                 alarmId = RandomNumberGen.getInstance().randomInt();
-                pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+                pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, PendingIntent.FLAG_CANCEL_CURRENT);
                 am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
                 if(Calendar.getInstance().getTimeInMillis() <= (calendar.getTimeInMillis() - 20 * i * 60000)) {
                     am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - 20 * i * 60000 , AlarmManager.INTERVAL_DAY * 7, pendingIntent);
@@ -110,7 +117,7 @@ public abstract class AlarmSetter {
         }
         for(int alarmId : o.getAlarmIds()) {
             Intent intent1 = new Intent(context, AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, 0);
             AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
             am.cancel(pendingIntent);
         }
