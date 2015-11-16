@@ -128,7 +128,7 @@ public class Reminders extends AppCompatActivity {
                 Reminder reminder = occurrence.getReminder();
                 intent.putExtra("reminder", reminder);
                 intent.putExtra("index", reminders.getReminders().indexOf(reminder));
-                AlarmSetter.cancelRepeatingAlarmForReminder(reminder, null);
+                //AlarmSetter.cancelRepeatingAlarmForReminder(reminder, null);
                 startActivityForResult(intent, 2);
                 return true;
             }

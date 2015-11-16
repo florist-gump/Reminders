@@ -44,7 +44,7 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
 
     public void setTime(LocalTime time) {
         this.time = time;
-        updateAlarms();
+        //updateAlarms();
     }
 
     public Reminder getReminder() {
@@ -85,7 +85,7 @@ public class Occurrence implements Comparable<Occurrence>, Serializable {
 
     public void setNotificationFrequency(int notificationFrequency) {
         this.notificationFrequency = notificationFrequency;
-        updateAlarms();
+        //updateAlarms();
     }
 
     @Override

@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import Helpers.PersistencyManager;
+
 /**
  * Created by joshuamarsh on 11/6/15.
  */
@@ -13,7 +15,9 @@ public class Treatment3Receiver extends BroadcastReceiver {
         MyApp.initOnBroadCastReceiver(context);
 
         ExperimentSetup.treatment3();
-//        System.out.println("*********In Treatment3Receiver *********\n****************");
+        Model.Reminders reminders = MyApp.getReminders();
+        PersistencyManager.saveReminders(reminders, false);
+        System.out.println("*********In Treatment3Receiver *********\n****************");
     }
 
 }

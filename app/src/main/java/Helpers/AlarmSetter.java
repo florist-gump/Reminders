@@ -28,10 +28,18 @@ public abstract class AlarmSetter {
         }
         for (Occurrence o : reminder.getOccurrences()) {
             for(Integer i : o.getAlarmIds()) {
-                Log.d("alarmids set", o.getReminder().getName() + o.getDay() + i.toString());
+                Log.d("x2 alarmids getRem", o.getReminder().getName() + o.getDay() + i.toString());
             }
+            Log.d("x2 getRem active", o.getIsActive().toString());
+            Log.d("x2 getRem freq", Integer.toString(o.getNotificationFrequency()));
             cancleAllAlarmsForOccurrence(o, context);
             setAllAlarmsForOccurrence(o, context);
+            for(Integer i : o.getAlarmIds()) {
+                Log.d("x2 alarmids getRemAfter", o.getReminder().getName() + o.getDay() + i.toString());
+            }
+            Log.d("x2 getRem active After", o.getIsActive().toString());
+            Log.d("x2 getRem freq After", Integer.toString(o.getNotificationFrequency()));
+
         }
     }
 
@@ -97,6 +105,7 @@ public abstract class AlarmSetter {
                 alarmId = RandomNumberGen.getInstance().randomInt();
                 pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, PendingIntent.FLAG_CANCEL_CURRENT);
                 am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+                l = calendar.getTimeInMillis() - 20 * i * 60000;
                 if(Calendar.getInstance().getTimeInMillis() <= (calendar.getTimeInMillis() - 20 * i * 60000)) {
                     am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() - 20 * i * 60000 , AlarmManager.INTERVAL_DAY * 7, pendingIntent);
                 } else {
@@ -117,7 +126,7 @@ public abstract class AlarmSetter {
         }
         for(int alarmId : o.getAlarmIds()) {
             Intent intent1 = new Intent(context, AlarmReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, 0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,alarmId, intent1, PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
             am.cancel(pendingIntent);
         }

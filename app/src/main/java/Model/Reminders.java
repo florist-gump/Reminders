@@ -47,6 +47,7 @@ public class Reminders extends Observable implements Serializable {
     }
 
     public void modifyReminder(Reminder reminder, int index) {
+        AlarmSetter.cancelRepeatingAlarmForReminder(this.reminders.get(index), null);
         this.reminders.set(index, reminder);
         AlarmSetter.setRepeatingAlarmForReminder(reminder, null);
         setChanged();

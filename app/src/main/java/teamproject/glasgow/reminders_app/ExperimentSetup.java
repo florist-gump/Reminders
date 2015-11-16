@@ -77,16 +77,17 @@ public class ExperimentSetup extends AppCompatActivity {
         for (Occurrence occurrence : occurrencesOfA) {
             occurrence.setIsActive(false);
         }
-
     }
 
     public static void treatment3() {
         populateTaskReminders();
         NotificationManager.createNotification(null, "A Message From the Reminders App", "Notifications for " + taskA + " have been turned on.");
+        if(taskAReminder == null) {return;}
         occurrencesOfA = taskAReminder.getOccurrences();
         for (Occurrence occurrence : occurrencesOfA) {
             occurrence.setIsActive(true);
         }
+        if(taskBReminder == null) {return;}
         occurrencesOfB = taskBReminder.getOccurrences();
 
         Random randomGen = new Random();
@@ -446,6 +447,162 @@ public class ExperimentSetup extends AppCompatActivity {
                     otherTaskReminders.add(reminder);
                 }
             }
+        }
+        switch (MyApp.getUserID()) {
+            case 0:
+                frequencyOfA = 2;
+                frequencyOfB = 2;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 0;
+                frequencyOfF = 0;
+                break;
+            case 1:
+                frequencyOfA = 0;
+                frequencyOfB = 0;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 0;
+                frequencyOfF = 0;
+                break;
+            case 2:
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 2;
+                frequencyOfD = 0;
+                frequencyOfE = 0;
+                frequencyOfF = 0;
+                break;
+            case 3:
+                frequencyOfA = 2;
+                frequencyOfB = 2;
+                frequencyOfC = 1;
+                frequencyOfD = 1;
+                frequencyOfE = 0;
+                frequencyOfF = 0;
+                break;
+            case 4:
+                frequencyOfA = 0;
+                frequencyOfB = 2;
+                frequencyOfC = 0;
+                frequencyOfD = 1;
+                frequencyOfE = 1;
+                frequencyOfF = 0;
+                break;
+            case 5:
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 0;
+                frequencyOfD = 1;
+                frequencyOfE = 0;
+                frequencyOfF = 1;
+                break;
+            case 6:
+                frequencyOfA = 2;
+                frequencyOfB = 0;
+                frequencyOfC = 0;
+                frequencyOfD = 0;
+                frequencyOfE = 1;
+                frequencyOfF = 1;
+                break;
+            case 7:
+                frequencyOfA = 0;
+                frequencyOfB = 0;
+                frequencyOfC = 1;
+                frequencyOfD = 1;
+                frequencyOfE = 1;
+                frequencyOfF = 1;
+                break;
+            case 8:
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 1;
+                frequencyOfF = 1;
+                break;
+            case 9:
+                frequencyOfA = 2;
+                frequencyOfB = 2;
+                frequencyOfC = 0;
+                frequencyOfD = 1;
+                frequencyOfE = 2;
+                frequencyOfF = 1;
+                break;
+            case 10:
+                frequencyOfA = 0;
+                frequencyOfB = 2;
+                frequencyOfC = 0;
+                frequencyOfD = 1;
+                frequencyOfE = 1;
+                frequencyOfF = 2;
+                break;
+            case 11:
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 0;
+                frequencyOfD = 0;
+                frequencyOfE = 2;
+                frequencyOfF = 2;
+                break;
+            case 12:
+                frequencyOfA = 2;
+                frequencyOfB = 0;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 0;
+                frequencyOfF = 2;
+                break;
+            case 13:
+                frequencyOfA = 0;
+                frequencyOfB = 0;
+                frequencyOfC = 1;
+                frequencyOfD = 2;
+                frequencyOfE = 1;
+                frequencyOfF = 2;
+                break;
+            case 14:
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 1;
+                frequencyOfD = 1;
+                frequencyOfE = 2;
+                frequencyOfF = 2;
+                break;
+            case 15:
+                frequencyOfA = 2;
+                frequencyOfB = 2;
+                frequencyOfC = 0;
+                frequencyOfD = 2;
+                frequencyOfE = 2;
+                frequencyOfF = 2;
+                break;
+            case 16:
+                frequencyOfA = 0;
+                frequencyOfB = 2;
+                frequencyOfC = 2;
+                frequencyOfD = 0;
+                frequencyOfE = 2;
+                frequencyOfF = 2;
+                break;
+            case 17:
+                frequencyOfA = 1;
+                frequencyOfB = 1;
+                frequencyOfC = 2;
+                frequencyOfD = 2;
+                frequencyOfE = 0;
+                frequencyOfF = 2;
+                break;
+            case 18:
+                frequencyOfA = 2;
+                frequencyOfB = 0;
+                frequencyOfC = 2;
+                frequencyOfD = 2;
+                frequencyOfE = 2;
+                frequencyOfF = 0;
+                break;
+            default:
+                break;
         }
     }
 
